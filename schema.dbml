@@ -1,0 +1,16 @@
+//see https://dbdiagram.io/d/OpenFlightHub-6755970ee9daa85aca06b8ce
+
+
+Table users {
+  id serial [primary key, not null]
+  name text [not null]
+  email text [not null] //encrypted
+  email_hash text [not null] //bcrypt hash
+  password text //scrypt hash base64 encoded
+  login_token text //some unique token
+  session_token text //some unique token
+  reset_code text //some unique token
+  created_at timestamptz [not null, default: `now()`]
+  state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
+  locale text [not null, default: 'en-US']
+}

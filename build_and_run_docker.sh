@@ -1,0 +1,18 @@
+docker pull postgres:15.2
+
+docker stop ofh-database || true
+
+docker rm ofh-database || true
+
+docker volume rm ofh-pg-data
+
+docker run -itd --restart unless-stopped -e POSTGRES_USER=ofh -e POSTGRES_PASSWORD=ofh -p 5000:5432 -v ofh-pg-data:/var/lib/postgresql/data  --name ofh-database postgres:15.2
+
+cat wait-for.sh | sh -s -- localhost:5000 -- echo "Database is up"
+sleep 10
+
+cat 0_init_tables.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
+cat 1_init_users_and_permissions.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
+
+cat X_fill_with_example_data.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
+

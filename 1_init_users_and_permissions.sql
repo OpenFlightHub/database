@@ -1,0 +1,15 @@
+-- Privileges explained: https://www.postgresql.org/docs/9.0/sql-grant.html
+
+DROP ROLE IF EXISTS api;
+CREATE ROLE api WITH
+	LOGIN
+	NOSUPERUSER
+	NOCREATEDB
+	NOCREATEROLE
+	INHERIT
+	NOREPLICATION
+	CONNECTION LIMIT -1
+	PASSWORD '123456';
+
+GRANT USAGE ON SCHEMA public TO api;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO api;
