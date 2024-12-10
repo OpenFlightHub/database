@@ -43,6 +43,7 @@ Ref: connections.drone_id > drones.id
 Table remote_controllers {
   id serial [primary key, not null]
   serial_number text [not null]
+  type integer [not null, default: 0, note: "0 = dji rc pro enterprise, 1 = dji rc plus"]
 }
 
 Table drones {

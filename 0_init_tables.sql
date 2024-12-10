@@ -33,7 +33,8 @@ CREATE TABLE "connections" (
 
 CREATE TABLE "remote_controllers" (
   "id" serial PRIMARY KEY NOT NULL,
-  "serial_number" text NOT NULL
+  "serial_number" text NOT NULL,
+  "type" integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE "drones" (
@@ -44,6 +45,8 @@ CREATE TABLE "drones" (
 );
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
+
+COMMENT ON COLUMN "remote_controllers"."type" IS '0 = dji rc pro enterprise, 1 = dji rc plus';
 
 COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
 
