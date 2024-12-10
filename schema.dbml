@@ -14,3 +14,40 @@ Table users {
   state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
   locale text [not null, default: 'en-US']
 }
+
+
+Table workspaces {
+  id serial [primary key, not null]
+  name text [not null]
+}
+
+Table workspace_permissions {
+  user_id integer [primary key, not null]
+  workspace_id integer [primary key, not null]
+}
+Ref: workspace_permissions.user_id > users.id
+Ref: workspace_permissions.workspace_id > workspaces.id
+
+Table connections {
+  id serial [primary key, not null]
+  access_key text [not null]//used as credential together with id
+  workspace_id integer [not null]
+  remote_controller_id integer
+  drone_id integer
+}
+Ref: connections.workspace_id > workspaces.id
+Ref: connections.remote_controller_id > remote_controllers.id
+Ref: connections.drone_id > drones.id
+
+
+Table remote_controllers {
+  id serial [primary key, not null]
+  serial_number text [not null]
+}
+
+Table drones {
+  id serial [primary key, not null]
+  serial_number text [not null]
+  name text [not null]
+  type integer [not null, default: 0, note: "0 = dji mavic 3"]
+}

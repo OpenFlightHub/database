@@ -12,4 +12,47 @@ CREATE TABLE "users" (
   "locale" text NOT NULL DEFAULT 'en-US'
 );
 
+CREATE TABLE "workspaces" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "name" text NOT NULL
+);
+
+CREATE TABLE "workspace_permissions" (
+  "user_id" integer NOT NULL,
+  "workspace_id" integer NOT NULL,
+  PRIMARY KEY ("user_id", "workspace_id")
+);
+
+CREATE TABLE "connections" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "access_key" text NOT NULL,
+  "workspace_id" integer NOT NULL,
+  "remote_controller_id" integer,
+  "drone_id" integer
+);
+
+CREATE TABLE "remote_controllers" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "serial_number" text NOT NULL
+);
+
+CREATE TABLE "drones" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "serial_number" text NOT NULL,
+  "name" text NOT NULL,
+  "type" integer NOT NULL DEFAULT 0
+);
+
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
+
+COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
+
+ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+
+ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+
+ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
+
+ALTER TABLE "connections" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
