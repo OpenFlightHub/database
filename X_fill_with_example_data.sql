@@ -25,6 +25,11 @@ INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_EXAMPLE', 'Exampl
 INSERT INTO connections (id, access_key, workspace_id, drone_id, remote_controller_id) VALUES (1, 'access', 1, 1, 1);
 
 
+-- remote_controller_data #1
+INSERT INTO remote_controller_data (id, drone_id, type, data) VALUES (1, 1, 0, '{height: 981.7, latitude: 47.53882, longitude: 10.32101}'::json);
+
+-- drone_data #1
+INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 1, 0, '{height: 1609.2, latitude: 47.54368, longitude: 10.31736}'::json);
 
 -- FIX all id sequences
 SELECT setval('users_id_seq', 1, true);
@@ -32,5 +37,7 @@ SELECT setval('workspaces_id_seq', 2, true);
 SELECT setval('remote_controllers_id_seq', 1, true);
 SELECT setval('drones_id_seq', 1, true);
 SELECT setval('connections_id_seq', 1, true);
+SELECT setval('remote_controller_data', 1, true);
+SELECT setval('drone_data_id_seq', 1, true);
 
 

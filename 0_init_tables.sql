@@ -44,11 +44,31 @@ CREATE TABLE "drones" (
   "type" integer NOT NULL DEFAULT 0
 );
 
+CREATE TABLE "remote_controller_data" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "remote_controller_id" integer NOT NULL,
+  "type" integer NOT NULL DEFAULT 0,
+  "data" jsonb NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+);
+
+CREATE TABLE "drone_data" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "drone_id" integer NOT NULL,
+  "type" integer NOT NULL DEFAULT 0,
+  "data" jsonb NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+);
+
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = dji rc pro enterprise, 1 = dji rc plus';
 
 COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
+
+COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
+
+COMMENT ON COLUMN "drone_data"."type" IS '0 = todo';
 
 ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
@@ -59,3 +79,7 @@ ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspace
 ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
 ALTER TABLE "connections" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
+
+ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");

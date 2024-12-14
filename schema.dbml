@@ -52,3 +52,22 @@ Table drones {
   name text [not null]
   type integer [not null, default: 0, note: "0 = dji mavic 3"]
 }
+
+
+Table remote_controller_data {
+  id serial [primary key, not null]
+  remote_controller_id integer [not null]
+  type integer [not null, default: 0, note: "0 = todo"]
+  data jsonb [not null]
+  created_at timestamptz [not null, default: 'now()']
+}
+Ref: remote_controller_data.remote_controller_id > remote_controllers.id
+
+Table drone_data {
+  id serial [primary key, not null]
+  drone_id integer [not null]
+  type integer [not null, default: 0, note: "0 = todo"]
+  data jsonb [not null]
+  created_at timestamptz [not null, default: 'now()']
+}
+Ref: drone_data.drone_id > drones.id
