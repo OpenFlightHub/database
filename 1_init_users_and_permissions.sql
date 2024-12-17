@@ -13,8 +13,17 @@ CREATE ROLE api WITH
 
 GRANT USAGE ON SCHEMA public TO api;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO api;
+GRANT USAGE ON SEQUENCE public.users_id_seq TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.workspaces TO api;
+GRANT USAGE ON SEQUENCE public.workspaces_id_seq TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.workspace_permissions TO api;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.drones TO api;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.remote_controllers TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.connections TO api;
+GRANT USAGE ON SEQUENCE public.connections_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.drones TO api;
+GRANT USAGE ON SEQUENCE public.drones_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.remote_controllers TO api;
+GRANT USAGE ON SEQUENCE public.remote_controllers_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.drone_data TO api;
+GRANT USAGE ON SEQUENCE public.drone_data_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.remote_controller_data TO api;
+GRANT USAGE ON SEQUENCE public.remote_controller_data_id_seq TO api;
