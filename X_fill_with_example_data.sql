@@ -26,18 +26,33 @@ INSERT INTO connections (id, access_key, workspace_id, drone_id, remote_controll
 
 
 -- remote_controller_data #1
-INSERT INTO remote_controller_data (id, drone_id, type, data) VALUES (1, 1, 0, '{height: 981.7, latitude: 47.53882, longitude: 10.32101}'::json);
+INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES (1, 1, 0, '{"height": 738.1, "latitude": 47.558801, "longitude": 10.285472}'::json);
 
 -- drone_data #1
-INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 1, 0, '{height: 1609.2, latitude: 47.54368, longitude: 10.31736}'::json);
+INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 1, 0, '{"height": 802.2, "latitude": 47.558801, "longitude": 10.283472}'::json);
+
+
+-- remote_controllers #2
+INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_FAKE');
+
+-- drones #2
+INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_FAKE', 'Fake Mavic 3');
+
+-- connections #2
+INSERT INTO connections (id, access_key, workspace_id, drone_id, remote_controller_id) VALUES (2, 'fake', 1, 2, 2);
+
+
+-- remote_controller_data #2
+INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES (2, 2, 0, '{"height": 1051.7, "latitude": 47.53882, "longitude": 10.32101}'::json);
+
 
 -- FIX all id sequences
 SELECT setval('users_id_seq', 1, true);
 SELECT setval('workspaces_id_seq', 2, true);
-SELECT setval('remote_controllers_id_seq', 1, true);
-SELECT setval('drones_id_seq', 1, true);
-SELECT setval('connections_id_seq', 1, true);
-SELECT setval('remote_controller_data', 1, true);
+SELECT setval('remote_controllers_id_seq', 2, true);
+SELECT setval('drones_id_seq', 2, true);
+SELECT setval('connections_id_seq', 2, true);
+SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 1, true);
 
 
