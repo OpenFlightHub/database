@@ -49,7 +49,7 @@ CREATE TABLE "remote_controller_data" (
   "remote_controller_id" integer NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "data" jsonb NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "drone_data" (
@@ -57,7 +57,7 @@ CREATE TABLE "drone_data" (
   "drone_id" integer NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "data" jsonb NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT 'now()'
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
