@@ -1,7 +1,12 @@
 
--- users #1 password = brainstem
+-- users #1 password = ofh
 INSERT INTO users (id, name, email, email_hash, password) VALUES (1, 'Admin', 'mail@openflighthub.org', '', '64$65536$8$1$lk/s/aij4pLpEFK7eF2iIkFD1vxNYpipvVz9uTBqJUI=$ouhy3I2GXduGM8m8HY1/XszNonxy7oYJYnv9lx6BcfUH2AKUxgfeM9qnAVuSs9cYjaFDuN0Awt8RHjBOkgnhLg==');
 
+-- users #2 (for api tests) password = CorrectBatteryHorseStaple
+INSERT INTO users (id, name, email, email_hash, password, session_token) VALUES (2, 'test_api_1', 'test_api_1@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', 'session_2');
+
+-- users #3 (for api tests) password = CorrectBatteryHorseStaple
+INSERT INTO users (id, name, email, email_hash, password, login_token) VALUES (3, 'test_api_2', 'test_api_2@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', '39s7h17sd76g1sd');
 
 -- workspaces #1
 INSERT INTO workspaces (id, name) VALUES (1, 'Test');
@@ -22,7 +27,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (1, 'RC_EXAMPLE');
 INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_EXAMPLE', 'Example Mavic 3');
 
 -- connections #1
-INSERT INTO connections (id, access_key, workspace_id, drone_id, remote_controller_id) VALUES (1, 'access', 1, 1, 1);
+INSERT INTO connections (id, secret, workspace_id, drone_id, remote_controller_id) VALUES (1, 'access', 1, 1, 1);
 
 
 -- remote_controller_data #1
@@ -39,7 +44,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_FAKE');
 INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_FAKE', 'Fake Mavic 3');
 
 -- connections #2
-INSERT INTO connections (id, access_key, workspace_id, drone_id, remote_controller_id) VALUES (2, 'fake', 1, 2, 2);
+INSERT INTO connections (id, secret, workspace_id, drone_id, remote_controller_id) VALUES (2, 'fake', 1, 2, 2);
 
 
 -- remote_controller_data #2
@@ -47,7 +52,7 @@ INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES
 
 
 -- FIX all id sequences
-SELECT setval('users_id_seq', 1, true);
+SELECT setval('users_id_seq', 3, true);
 SELECT setval('workspaces_id_seq', 2, true);
 SELECT setval('remote_controllers_id_seq', 2, true);
 SELECT setval('drones_id_seq', 2, true);
