@@ -9,6 +9,7 @@ Table users {
   password text //scrypt hash base64 encoded
   login_token text //some unique token
   session_token text //some unique token
+  stream_token text //some unique token
   reset_code text //some unique token
   created_at timestamptz [not null, default: `now()`]
   state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
@@ -67,7 +68,7 @@ Ref: remote_controller_data.remote_controller_id > remote_controllers.id
 Table drone_data {
   id serial [primary key, not null]
   drone_id integer [not null]
-  type integer [not null, default: 0, note: "0 = todo"]
+  type integer [not null, default: 0, note: "0 = position, 1 = battery"]
   data jsonb [not null]
   created_at timestamptz [not null, default: `now()`]
 }

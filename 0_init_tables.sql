@@ -6,6 +6,7 @@ CREATE TABLE "users" (
   "password" text,
   "login_token" text,
   "session_token" text,
+  "stream_token" text,
   "reset_code" text,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "state" integer NOT NULL DEFAULT 0,
