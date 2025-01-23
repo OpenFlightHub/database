@@ -1,5 +1,5 @@
 env:
-  PROJECT_NAME: database
+  PROJECT_NAME: ofh-database
 
 name: restart-production-database
 on: [workflow_dispatch]

@@ -1,5 +1,5 @@
 env:
-  PROJECT_NAME: database
+  PROJECT_NAME: ofh-database
 
 name: create-production-database-clean
 on: [workflow_dispatch]
