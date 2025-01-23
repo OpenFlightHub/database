@@ -17,5 +17,22 @@ CREATE OR REPLACE FUNCTION notify_change() RETURNS trigger AS $notify_change$
     END;
 $notify_change$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER notify_change_drone_data AFTER UPDATE ON drone_data FOR EACH ROW EXECUTE FUNCTION notify_change();
-CREATE OR REPLACE TRIGGER notify_change_remote_controller_data AFTER UPDATE ON remote_controller_data FOR EACH ROW EXECUTE FUNCTION notify_change();
+-- notify when insert happens on some specific tables
+
+CREATE OR REPLACE FUNCTION notify_insert() RETURNS trigger AS $notify_insert$
+    BEGIN
+		PERFORM pg_notify(
+			'notify_insert',
+			json_build_object(
+			  'id', NEW.id::text,
+			  'table', TG_TABLE_NAME,
+        'data', NEW
+			)::text
+		  );
+
+        RETURN NULL;
+    END;
+$notify_insert$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER notify_insert_drone_data AFTER INSERT ON drone_data FOR EACH ROW EXECUTE FUNCTION notify_insert();
+CREATE OR REPLACE TRIGGER notify_insert_remote_controller_data AFTER INSERT ON remote_controller_data FOR EACH ROW EXECUTE FUNCTION notify_insert();
