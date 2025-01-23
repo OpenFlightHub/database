@@ -43,6 +43,7 @@ jobs:
           cd repo
           cat 0_init_tables.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
           cat 1_init_users_and_permissions.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
+          cat 2_setup_triggers.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
 
       - name: Fill database with example data
         run: |

@@ -13,6 +13,7 @@ sleep 10
 
 cat 0_init_tables.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 cat 1_init_users_and_permissions.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
+cat 2_setup_triggers.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 
 cat X_fill_with_example_data.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 
