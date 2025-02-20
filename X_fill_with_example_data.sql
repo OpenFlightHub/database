@@ -59,10 +59,10 @@ INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 2, 0, '{"height": 8
 
 
 -- files #1
-INSERT INTO files (id, workspace_id, name, created_by) VALUES (1, 2, 'example media', 1);
+INSERT INTO files (id, workspace_id, name, created_by) VALUES (1, 1, 'example media', 1);
 
 -- drone_media #1
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 2, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"drone_model_key": "example_drone_model_key", "is_original": true, "payload_model_key": "example_payload_model_key", "tinny_fingerprint":  "example_tinny_fingerprint", "sn": "example_sn"}'::json);
+INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"drone_model_key": "example_drone_model_key", "is_original": true, "payload_model_key": "example_payload_model_key", "tinny_fingerprint":  "example_tinny_fingerprint", "sn": "example_sn"}'::json);
 
 
 -- FIX all id sequences
