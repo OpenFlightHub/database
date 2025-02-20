@@ -10,7 +10,7 @@ MAKE SURE: that this github action secret is properly set
 
 e.g.
 ```sql
-ALTER USER api with encrypted password 'a878187sd8687618718';
+ALTER ROLE api password '1234';;
 ```
 
 Also set the secrets `POSTGRES_PASSWORD` and `POSTGRES_USER` which is the admin account for postgres
