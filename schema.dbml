@@ -79,7 +79,7 @@ Ref: remote_controller_data.remote_controller_id > remote_controllers.id
 Table drone_data {
   id serial [primary key, not null]
   drone_id integer [not null]
-  type integer [not null, default: 0, note: "0 = position, 1 = battery"]
+  type integer [not null, default: 0, note: "0 = position, 1 = telemetry"]
   data jsonb [not null]
   created_at timestamptz [not null, default: `now()`]
 }

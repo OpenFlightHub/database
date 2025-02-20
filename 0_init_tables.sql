@@ -89,7 +89,7 @@ COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
 
 COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
 
-COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = battery';
+COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = telemetry';
 
 COMMENT ON COLUMN "drone_media"."type" IS '0 = video, 1 = picture, 2 = panorama';
 
