@@ -1,4 +1,7 @@
 
+-- users #0 (the system user)
+INSERT INTO users (id, name, email, email_hash) VALUES (0, 'system', '', '');
+
 -- users #1 (for example usage) password = 1234
 INSERT INTO users (id, name, email, email_hash, password) VALUES (1, 'test', 'test@openflighthub.org', '', '64$65536$8$1$o01tZR9QKBZbfXHtgCsHjSJfWHZwitNYhuYKGYO8RVQ=$55PAX9JDYsNPGNFXOOgdCNeZ7A/tPYD5jHvFoMbqw7BlJN+HY3g1cO9X/Nt5uHevNBidUBQOKDSWlCNbVPBDKg==');
 
