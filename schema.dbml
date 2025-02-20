@@ -19,7 +19,8 @@ Table users {
 Table files {
   id serial [primary key, not null]
   workspace_id integer [not null]
-  name text [not null]
+  ext text [not null]
+  name text [not null] // full original name including extension
   created_at timestamptz [not null, default: `now()`]
   created_by integer [not null]
 }

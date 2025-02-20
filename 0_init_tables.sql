@@ -16,6 +16,7 @@ CREATE TABLE "users" (
 CREATE TABLE "files" (
   "id" serial PRIMARY KEY NOT NULL,
   "workspace_id" integer NOT NULL,
+  "ext" text NOT NULL,
   "name" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "created_by" integer NOT NULL
