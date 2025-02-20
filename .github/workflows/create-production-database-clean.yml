@@ -28,6 +28,7 @@ jobs:
           docker rm ${{ env.PROJECT_NAME }} || true
           rm -rf /data
           rm -rf /ofh_files/*
+          mkdir /ofh_files
 
       - name: Start new docker container
         run: |
