@@ -57,3 +57,8 @@ jobs:
         run: |
           cd repo
           cat X_fill_with_example_data.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
+
+      - name: Alter user passwords
+        run: |
+          echo "${{secrets.ALTER_USER_SQL}}" > alter_user.sql
+          cat alter_user.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
