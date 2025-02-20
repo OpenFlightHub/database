@@ -27,6 +27,7 @@ jobs:
         run: |
           docker rm ${{ env.PROJECT_NAME }} || true
           rm -rf /data
+          rm rf /ofh_files/*
 
       - name: Start new docker container
         run: |
@@ -44,6 +45,13 @@ jobs:
           cat 0_init_tables.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
           cat 1_init_users_and_permissions.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
           cat 2_setup_triggers.sql | docker exec -i ${{ env.PROJECT_NAME }} psql -v ON_ERROR_STOP=1 --dbname=postgresql://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432
+
+
+      - name: Fill /ofh_files with example data
+        run: |
+          cd repo
+          rm -r /ofh_files/* || true
+          cp -r example_files/* /ofh_files/
 
       - name: Fill database with example data
         run: |

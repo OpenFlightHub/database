@@ -11,6 +11,10 @@ docker run -itd --restart unless-stopped -e POSTGRES_USER=ofh -e POSTGRES_PASSWO
 cat wait-for.sh | sh -s -- localhost:5000 -- echo "Database is up"
 sleep 10
 
+
+rm -r ~/Documents/ofh_files/*
+cp -r example_files/* ~/Documents/ofh_files/
+
 cat 0_init_tables.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 cat 1_init_users_and_permissions.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 cat 2_setup_triggers.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432

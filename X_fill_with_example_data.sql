@@ -58,6 +58,13 @@ INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES
 INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 2, 0, '{"height": 802.2, "latitude": 47.558801, "longitude": 10.283472}'::json);
 
 
+-- files #1
+INSERT INTO files (id, workspace_id, name, created_by) VALUES (1, 2, 'example media', 0);
+
+-- drone_media #1
+INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 2, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"drone_model_key": "example_drone_model_key", "is_original": true, "payload_model_key": "example_payload_model_key", "tinny_fingerprint":  "example_tinny_fingerprint", "sn": "example_sn"}'::json);
+
+
 -- FIX all id sequences
 SELECT setval('users_id_seq', 4, true);
 SELECT setval('workspaces_id_seq', 2, true);
@@ -66,5 +73,7 @@ SELECT setval('drones_id_seq', 2, true);
 SELECT setval('connections_id_seq', 2, true);
 SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 1, true);
+SELECT setval('files_id_seq', 1, true);
+SELECT setval('drone_media_id_seq', 1, true);
 
 

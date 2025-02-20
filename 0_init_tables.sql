@@ -13,6 +13,14 @@ CREATE TABLE "users" (
   "locale" text NOT NULL DEFAULT 'en-US'
 );
 
+CREATE TABLE "files" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "workspace_id" integer NOT NULL,
+  "name" text NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "created_by" integer NOT NULL
+);
+
 CREATE TABLE "workspaces" (
   "id" serial PRIMARY KEY NOT NULL,
   "name" text NOT NULL
@@ -62,6 +70,16 @@ CREATE TABLE "drone_data" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "drone_media" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "drone_id" integer NOT NULL,
+  "type" integer NOT NULL,
+  "file_id" integer NOT NULL,
+  "fingerprint" text NOT NULL,
+  "tiny_fingerprint" text NOT NULL,
+  "meta" text
+);
+
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = dji rc pro enterprise, 1 = dji rc plus';
@@ -70,7 +88,13 @@ COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
 
 COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
 
-COMMENT ON COLUMN "drone_data"."type" IS '0 = todo';
+COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = battery';
+
+COMMENT ON COLUMN "drone_media"."type" IS '0 = video, 1 = picture, 2 = panorama';
+
+ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+
+ALTER TABLE "files" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id");
 
 ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
@@ -85,3 +109,7 @@ ALTER TABLE "connections" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id"
 ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
 ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
