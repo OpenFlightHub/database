@@ -77,7 +77,6 @@ CREATE TABLE "drone_media" (
   "type" integer NOT NULL,
   "file_id" integer NOT NULL,
   "fingerprint" text NOT NULL,
-  "tiny_fingerprint" text NOT NULL,
   "meta" text
 );
 
