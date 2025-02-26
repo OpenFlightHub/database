@@ -92,6 +92,7 @@ Table drone_media {
   type integer [not null, note: "0 = video, 1 = picture, 2 = panorama"]
   file_id integer [not null]
   fingerprint text [not null]
+  tiny_fingerprint text [not null]
   meta text//json encoded meta data
 }
 Ref: drone_media.drone_id > drones.id
