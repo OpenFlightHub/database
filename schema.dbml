@@ -42,9 +42,11 @@ Ref: workspace_permissions.workspace_id > workspaces.id
 
 Table connections {
   id serial [primary key, not null]
+  name text [not null]
   secret text [not null]//used as credential together with id
   session_token text
   workspace_id integer [not null]
+  workspace_uuid text [not null]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
   drone_id integer
 }

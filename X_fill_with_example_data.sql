@@ -30,7 +30,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (1, 'RC_FAKE');
 INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_FAKE', 'Fake Mavic 3');
 
 -- connections #1
-INSERT INTO connections (id, secret, workspace_id, drone_id, remote_controller_id) VALUES (1, 'fake', 1, 1, 1);
+INSERT INTO connections (id, secret, name, workspace_id, drone_id, remote_controller_id, workspace_uuid) VALUES (1, 'fake', 'con1', 1, 1, 1, 'a1491fa4-1afc-4f4b-8705-32ee5d28cc7d');
 
 
 -- remote_controller_data #1
@@ -51,7 +51,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_EXAMPLE');
 INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_EXAMPLE', 'Example Mavic 3');
 
 -- connections #2
-INSERT INTO connections (id, secret, workspace_id, drone_id, remote_controller_id) VALUES (2, 'access', 2, 2, 2);
+INSERT INTO connections (id, secret, name, workspace_id, drone_id, remote_controller_id, workspace_uuid) VALUES (2, 'access', 'con2', 2, 2, 2, '65fefa14-0fcb-4166-93db-583ef9fd6811');
 
 
 -- remote_controller_data #2
@@ -65,7 +65,7 @@ INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 2, 0, '{"height": 8
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'example media.png', 'png', 1);
 
 -- drone_media #1
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', '{"drone_model_key": "example_drone_model_key", "is_original": true, "payload_model_key": "example_payload_model_key", "tinny_fingerprint":  "example_tinny_fingerprint", "sn": "example_sn"}'::json);
+INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"drone_model_key": "example_drone_model_key", "is_original": true, "payload_model_key": "example_payload_model_key", "tinny_fingerprint":  "example_tinny_fingerprint", "sn": "example_sn"}'::json);
 
 
 -- FIX all id sequences

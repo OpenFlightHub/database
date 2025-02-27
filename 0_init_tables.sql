@@ -35,9 +35,11 @@ CREATE TABLE "workspace_permissions" (
 
 CREATE TABLE "connections" (
   "id" serial PRIMARY KEY NOT NULL,
+  "name" text NOT NULL,
   "secret" text NOT NULL,
   "session_token" text,
   "workspace_id" integer NOT NULL,
+  "workspace_uuid" text NOT NULL,
   "remote_controller_id" integer,
   "drone_id" integer
 );
