@@ -83,6 +83,16 @@ CREATE TABLE "drone_media" (
   "meta" text
 );
 
+CREATE TABLE "workspace_map_elements" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "uuid" text UNIQUE NOT NULL,
+  "workspace_id" integer NOT NULL,
+  "connection_id" integer NOT NULL,
+  "name" text NOT NULL,
+  "type" integer NOT NULL,
+  "content" text NOT NULL
+);
+
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = dji rc pro enterprise, 1 = dji rc plus';
@@ -116,3 +126,7 @@ ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id")
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
+
+ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+
+ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("connection_id") REFERENCES "connections" ("id");

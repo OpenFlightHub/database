@@ -99,3 +99,15 @@ Table drone_media {
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
+
+Table workspace_map_elements {
+  id serial [primary key, not null]
+  uuid text [not null, unique]
+  workspace_id integer [not null]
+  connection_id integer [not null]
+  name text [not null]
+  type integer [not null]
+  content text [not null] // json
+}
+Ref: workspace_map_elements.workspace_id > workspaces.id
+Ref: workspace_map_elements.connection_id > connections.id
