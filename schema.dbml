@@ -65,7 +65,7 @@ Table drones {
   id serial [primary key, not null]
   serial_number text [not null]
   name text [not null]
-  type integer [not null, default: 0, note: "0 = dji mavic 3"]
+  type integer [not null, default: 0, note: "0 = dji mavic 3, 1 = dji matrice 300, 2 = dji matrice 30"]
 }
 
 
@@ -99,3 +99,4 @@ Table drone_media {
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
+
