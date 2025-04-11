@@ -40,7 +40,8 @@ CREATE TABLE "connections" (
   "session_token" text,
   "workspace_id" integer NOT NULL,
   "workspace_uuid" text NOT NULL,
-  "remote_controller_id" integer
+  "remote_controller_id" integer,
+  "last_drone_id" integer
 );
 
 CREATE TABLE "remote_controllers" (
@@ -54,7 +55,7 @@ CREATE TABLE "drones" (
   "serial_number" text NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
-  "connection_id" integer
+  "last_connection_id" integer
 );
 
 CREATE TABLE "remote_controller_data" (
@@ -107,7 +108,9 @@ ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspace
 
 ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
-ALTER TABLE "drones" ADD FOREIGN KEY ("connection_id") REFERENCES "connections" ("id");
+ALTER TABLE "connections" ADD FOREIGN KEY ("last_drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connections" ("id");
 
 ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
