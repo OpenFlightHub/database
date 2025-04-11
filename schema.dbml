@@ -48,11 +48,9 @@ Table connections {
   workspace_id integer [not null]
   workspace_uuid text [not null]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
-  drone_id integer
 }
 Ref: connections.workspace_id > workspaces.id
 Ref: connections.remote_controller_id > remote_controllers.id
-Ref: connections.drone_id > drones.id
 
 
 Table remote_controllers {
@@ -66,7 +64,10 @@ Table drones {
   serial_number text [not null]
   name text [not null]
   type integer [not null, default: 0, note: "0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3"]
+  connection_id integer
 }
+Ref: drones.connection_id > connections.id
+
 
 
 Table remote_controller_data {
