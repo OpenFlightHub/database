@@ -48,7 +48,7 @@ Table connections {
   workspace_id integer [not null]
   workspace_uuid text [not null]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
-  last_drone_id integer // the "currently" connected drone (does not mean, the drone is currently online)
+  last_drone_id integer // the "currently" connected drone (does not mean that the drone is currently online)
 }
 Ref: connections.workspace_id > workspaces.id
 Ref: connections.remote_controller_id > remote_controllers.id
@@ -57,13 +57,13 @@ Ref: connections.last_drone_id > drones.id
 
 Table remote_controllers {
   id serial [primary key, not null]
-  serial_number text [not null]
+  serial_number text [not null, unique]
   type integer [not null, default: 0, note: "0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller"]
 }
 
 Table drones {
   id serial [primary key, not null]
-  serial_number text [not null]
+  serial_number text [not null, unique]
   name text [not null]
   type integer [not null, default: 0, note: "0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3"]
   last_connection_id integer
@@ -102,3 +102,4 @@ Table drone_media {
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
+

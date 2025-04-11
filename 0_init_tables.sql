@@ -46,13 +46,13 @@ CREATE TABLE "connections" (
 
 CREATE TABLE "remote_controllers" (
   "id" serial PRIMARY KEY NOT NULL,
-  "serial_number" text NOT NULL,
+  "serial_number" text UNIQUE NOT NULL,
   "type" integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE "drones" (
   "id" serial PRIMARY KEY NOT NULL,
-  "serial_number" text NOT NULL,
+  "serial_number" text UNIQUE NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "last_connection_id" integer
