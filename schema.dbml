@@ -58,7 +58,7 @@ Ref: connections.last_drone_id > drones.id
 Table remote_controllers {
   id serial [primary key, not null]
   serial_number text [not null]
-  type integer [not null, default: 0, note: "0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise"]
+  type integer [not null, default: 0, note: "0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller"]
 }
 
 Table drones {
@@ -102,4 +102,3 @@ Table drone_media {
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
-
