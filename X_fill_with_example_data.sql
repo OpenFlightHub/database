@@ -27,10 +27,10 @@ INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 4);
 INSERT INTO remote_controllers (id, serial_number) VALUES (1, 'RC_FAKE');
 
 -- drones #1
-INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_FAKE', 'Fake Mavic 3');
+INSERT INTO drones (id, serial_number, name, connection_id) VALUES (1, 'DRONE_FAKE', 'Fake Mavic 3', 1);
 
 -- connections #1
-INSERT INTO connections (id, secret, name, workspace_id, drone_id, remote_controller_id, workspace_uuid) VALUES (1, 'fake', 'con1', 1, 1, 1, 'a1491fa4-1afc-4f4b-8705-32ee5d28cc7d');
+INSERT INTO connections (id, secret, name, workspace_id, remote_controller_id, workspace_uuid) VALUES (1, 'fake', 'con1', 1, 1, 'a1491fa4-1afc-4f4b-8705-32ee5d28cc7d');
 
 
 -- remote_controller_data #1
@@ -48,10 +48,10 @@ INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (2, 4);
 INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_EXAMPLE');
 
 -- drones #2
-INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_EXAMPLE', 'Example Mavic 3');
+INSERT INTO drones (id, serial_number, name, connection_id) VALUES (2, 'DRONE_EXAMPLE', 'Example Mavic 3', 2);
 
 -- connections #2
-INSERT INTO connections (id, secret, name, workspace_id, drone_id, remote_controller_id, workspace_uuid) VALUES (2, 'access', 'con2', 2, 2, 2, '65fefa14-0fcb-4166-93db-583ef9fd6811');
+INSERT INTO connections (id, secret, name, workspace_id, drone_id, remote_controller_id, workspace_uuid) VALUES (2, 'access', 'con2', 2, 2, '65fefa14-0fcb-4166-93db-583ef9fd6811');
 
 
 -- remote_controller_data #2
