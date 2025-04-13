@@ -34,5 +34,8 @@ CREATE OR REPLACE FUNCTION notify_insert() RETURNS trigger AS $notify_insert$
     END;
 $notify_insert$ LANGUAGE plpgsql;
 
+
 CREATE OR REPLACE TRIGGER notify_insert_drone_data AFTER INSERT ON drone_data FOR EACH ROW EXECUTE FUNCTION notify_insert();
 CREATE OR REPLACE TRIGGER notify_insert_remote_controller_data AFTER INSERT ON remote_controller_data FOR EACH ROW EXECUTE FUNCTION notify_insert();
+
+CREATE OR REPLACE TRIGGER notify_insert_drone_media AFTER INSERT ON drone_media FOR EACH ROW EXECUTE FUNCTION notify_insert();
