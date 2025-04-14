@@ -23,6 +23,8 @@ Table files {
   name text [not null] // full original name including extension
   created_at timestamptz [not null, default: `now()`]
   created_by integer [not null]
+  has_thumbnail boolean [not null, default: false]
+  thumbnail_generation_has_failed boolean [not null, default: false]
 }
 Ref: files.workspace_id > workspaces.id
 Ref: files.created_by > users.id
