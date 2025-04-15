@@ -19,8 +19,8 @@ CREATE TABLE "files" (
   "ext" text NOT NULL,
   "name" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "created_by" integer NOT NULL
-  "has_thumbnail" boolean NOT NULL DEFAULT false
+  "created_by" integer NOT NULL,
+  "has_thumbnail" boolean NOT NULL DEFAULT false,
   "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false
 );
 
