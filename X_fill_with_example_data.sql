@@ -14,6 +14,9 @@ INSERT INTO users (id, name, email, email_hash, password, login_token) VALUES (3
 -- users #4 dev account password = ofh
 INSERT INTO users (id, name, email, email_hash, password) VALUES (4, 'Dev', 'mail@openflighthub.org', '', '64$65536$8$1$lk/s/aij4pLpEFK7eF2iIkFD1vxNYpipvVz9uTBqJUI=$ouhy3I2GXduGM8m8HY1/XszNonxy7oYJYnv9lx6BcfUH2AKUxgfeM9qnAVuSs9cYjaFDuN0Awt8RHjBOkgnhLg==');
 
+-- users #5 (for example usage) password = CorrectBatteryHorseStaple
+INSERT INTO users (id, name, email, email_hash, password) VALUES (5, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
+
 
 -- workspaces #1
 INSERT INTO workspaces (id, name) VALUES (1, 'Test Usage Example');
@@ -75,7 +78,7 @@ INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerpr
 
 
 -- FIX all id sequences
-SELECT setval('users_id_seq', 4, true);
+SELECT setval('users_id_seq', 5, true);
 SELECT setval('workspaces_id_seq', 2, true);
 SELECT setval('remote_controllers_id_seq', 2, true);
 SELECT setval('drones_id_seq', 2, true);
