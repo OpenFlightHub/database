@@ -24,6 +24,8 @@ INSERT INTO workspaces (id, name) VALUES (1, 'Test Usage Example');
 INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 1);
 -- grant permissions for user 4
 INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 4);
+-- grant permissions for user 5
+INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 5);
 
 
 -- remote_controllers #1
