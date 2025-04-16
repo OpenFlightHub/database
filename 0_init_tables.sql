@@ -22,7 +22,8 @@ CREATE TABLE "files" (
   "created_by" integer NOT NULL,
   "has_thumbnail" boolean NOT NULL DEFAULT false,
   "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false,
-  "exif_data" text
+  "exif_data" text,
+  "exif_data_generation_has_failed" boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE "workspaces" (
