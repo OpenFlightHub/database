@@ -60,13 +60,15 @@ CREATE TABLE "drones" (
   "name" text NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "last_connection_id" integer,
-  "current_flight_id" integer
+  "current_flight_id" integer,
+  "in_flight" boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE "flights" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
   "started_at" timestamptz NOT NULL DEFAULT (now()),
+  "landed_at" timestamptz,
   "ended_at" timestamptz
 );
 
@@ -90,6 +92,7 @@ CREATE TABLE "remote_controller_data" (
 CREATE TABLE "drone_data" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
+  "flight_id" integer NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "data" jsonb NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -98,6 +101,7 @@ CREATE TABLE "drone_data" (
 CREATE TABLE "drone_media" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
+  "flight_id" integer NOT NULL,
   "type" integer NOT NULL,
   "file_id" integer NOT NULL,
   "fingerprint" text NOT NULL,
@@ -147,6 +151,10 @@ ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") RE
 
 ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
 
+ALTER TABLE "drone_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
+
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
+
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");

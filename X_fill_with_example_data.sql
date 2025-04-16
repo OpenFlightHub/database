@@ -34,6 +34,11 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (1, 'RC_FAKE');
 -- drones #1
 INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_FAKE', 'Fake Mavic 3');
 
+-- flights #1
+INSERT INTO flights (id, drone_id) VALUES (1, 1);
+
+UPDATE drones SET current_flight_id = 1 WHERE id = 1;
+
 -- connections #1
 INSERT INTO connections (id, secret, name, workspace_id, last_drone_id, remote_controller_id, workspace_uuid) VALUES (1, 'fake', 'con1', 1, 1, 1, 'a1491fa4-1afc-4f4b-8705-32ee5d28cc7d');
 
@@ -56,6 +61,11 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_EXAMPLE');
 -- drones #2
 INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_EXAMPLE', 'Example Mavic 3');
 
+-- flights #2
+INSERT INTO flights (id, drone_id) VALUES (2, 2);
+
+UPDATE drones SET current_flight_id = 2 WHERE id = 2;
+
 -- connections #2
 INSERT INTO connections (id, secret, name, workspace_id, last_drone_id, remote_controller_id, workspace_uuid) VALUES (2, 'access', 'con2', 2, 2, 2, '65fefa14-0fcb-4166-93db-583ef9fd6811');
 
@@ -65,7 +75,7 @@ UPDATE drones SET last_connection_id = 2 WHERE id = 2;
 INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES (2, 2, 0, '{"height": 738.1, "latitude": 47.558801, "longitude": 10.285472}'::json);
 
 -- drone_data #1
-INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 2, 0, '{"height": 802.2, "latitude": 47.558801, "longitude": 10.283472}'::json);
+INSERT INTO drone_data (id, drone_id, flight_id, type, data) VALUES (1, 2, 2, 0, '{"height": 802.2, "latitude": 47.558801, "longitude": 10.283472}'::json);
 
 
 -- files #1
@@ -73,10 +83,10 @@ INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_2
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
 
 -- drone_media #1
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"38d9729c9c99ca866cb5e2a0937bce55_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.156,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.4,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889,"lng":10.18527063888889}}}'::json);
+INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"38d9729c9c99ca866cb5e2a0937bce55_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.156,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.4,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889,"lng":10.18527063888889}}}'::json);
 
 -- drone_media #2
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (2, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json);
+INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (2, 1, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json);
 
 
 -- FIX all id sequences
@@ -84,6 +94,7 @@ SELECT setval('users_id_seq', 5, true);
 SELECT setval('workspaces_id_seq', 2, true);
 SELECT setval('remote_controllers_id_seq', 2, true);
 SELECT setval('drones_id_seq', 2, true);
+SELECT setval('flights_id_seq', 2, true);
 SELECT setval('connections_id_seq', 2, true);
 SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 1, true);

@@ -31,3 +31,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.remote_controller_data TO a
 GRANT USAGE ON SEQUENCE public.remote_controller_data_id_seq TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.drone_media TO api;
 GRANT USAGE ON SEQUENCE public.drone_media_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.flights TO api;
+GRANT USAGE ON SEQUENCE public.flights_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.flight_data TO api;
+GRANT USAGE ON SEQUENCE public.flight_data_id_seq TO api;
