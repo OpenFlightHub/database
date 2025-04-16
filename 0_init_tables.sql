@@ -59,7 +59,24 @@ CREATE TABLE "drones" (
   "serial_number" text UNIQUE NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
-  "last_connection_id" integer
+  "last_connection_id" integer,
+  "current_flight_id" integer
+);
+
+CREATE TABLE "flights" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "drone_id" integer NOT NULL,
+  "started_at" timestamptz NOT NULL DEFAULT (now()),
+  "ended_at" timestamptz
+);
+
+CREATE TABLE "flight_data" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "flight_id" integer NOT NULL,
+  "received_at" timestamptz NOT NULL DEFAULT (now()),
+  "created_at" timestamptz NOT NULL,
+  "type" integer NOT NULL,
+  "data" jsonb NOT NULL
 );
 
 CREATE TABLE "remote_controller_data" (
@@ -96,6 +113,8 @@ COMMENT ON COLUMN "remote_controllers"."type" IS '0 = unknown, 1 = dji rc plus, 
 
 COMMENT ON COLUMN "drones"."type" IS '0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3';
 
+COMMENT ON COLUMN "flight_data"."type" IS '0 = position';
+
 COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
 
 COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = telemetry';
@@ -117,6 +136,12 @@ ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "r
 ALTER TABLE "connections" ADD FOREIGN KEY ("last_drone_id") REFERENCES "drones" ("id");
 
 ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connections" ("id");
+
+ALTER TABLE "drones" ADD FOREIGN KEY ("current_flight_id") REFERENCES "flights" ("id");
+
+ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
 
 ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
