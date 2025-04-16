@@ -69,14 +69,14 @@ INSERT INTO drone_data (id, drone_id, type, data) VALUES (1, 2, 0, '{"height": 8
 
 
 -- files #1
-INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20250408224526_0001_T.JPG', 'JPG', 1);
-INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20250408224526_0001_V.JPG', 'JPG', 1);
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20230608135046_0004_T.JPG', 'JPG', 1);
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
 
 -- drone_media #1
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"38d9729c9c99ca866cb5e2a0937bce55_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":763.766,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":-136.5,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.559081,"lng":10.240311}}}'::json);
+INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"38d9729c9c99ca866cb5e2a0937bce55_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.156,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.4,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889,"lng":10.18527063888889}}}'::json);
 
 -- drone_media #2
-INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (2, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":763.767,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":-136.5,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.559081,"lng":10.240312}}}'::json);
+INSERT INTO drone_media (id, drone_id, type, file_id, fingerprint, tiny_fingerprint, meta) VALUES (2, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json);
 
 
 -- FIX all id sequences
