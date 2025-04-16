@@ -25,6 +25,7 @@ Table files {
   created_by integer [not null]
   has_thumbnail boolean [not null, default: false]
   thumbnail_generation_has_failed boolean [not null, default: false]
+  exif_data text//json encoded exif data
 }
 Ref: files.workspace_id > workspaces.id
 Ref: files.created_by > users.id
@@ -101,6 +102,8 @@ Table drone_media {
   fingerprint text [not null]
   tiny_fingerprint text [not null]
   meta text//json encoded meta data
+  coverage text//json encoded coverage data
+  coverage_generated_at timestamptz [not null, default: `now()`]
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id

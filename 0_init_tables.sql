@@ -21,7 +21,8 @@ CREATE TABLE "files" (
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "created_by" integer NOT NULL,
   "has_thumbnail" boolean NOT NULL DEFAULT false,
-  "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false
+  "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false,
+  "exif_data" text
 );
 
 CREATE TABLE "workspaces" (
@@ -83,7 +84,9 @@ CREATE TABLE "drone_media" (
   "file_id" integer NOT NULL,
   "fingerprint" text NOT NULL,
   "tiny_fingerprint" text NOT NULL,
-  "meta" text
+  "meta" text,
+  "coverage" text,
+  "coverage_generated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
