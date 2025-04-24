@@ -109,7 +109,7 @@ CREATE TABLE "drone_media" (
   "fingerprint" text NOT NULL,
   "tiny_fingerprint" text NOT NULL,
   "meta" text,
-  "captured_at" timestamp,
+  "captured_at" timestamptz,
   "received_at" timestamptz NOT NULL DEFAULT (now()),
   "coverage" text,
   "coverage_generated_at" timestamptz NOT NULL DEFAULT (now()),

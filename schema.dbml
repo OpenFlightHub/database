@@ -129,7 +129,7 @@ Table drone_media {
   fingerprint text [not null]
   tiny_fingerprint text [not null]
   meta text//json encoded meta data
-  captured_at timestamp
+  captured_at timestamptz
   received_at timestamptz [not null, default: `now()`]// when stored in db
   coverage text//json encoded coverage data
   coverage_generated_at timestamptz [not null, default: `now()`]
