@@ -29,8 +29,8 @@ CREATE TABLE "files" (
 CREATE TABLE "workspaces" (
   "id" serial PRIMARY KEY NOT NULL,
   "name" text NOT NULL,
-  "longitude" double precision NOT NULL,
-  "latitude" double precision NOT NULL
+  "longitude" float8 NOT NULL,
+  "latitude" float8 NOT NULL
 );
 
 CREATE TABLE "workspace_permissions" (
@@ -109,8 +109,12 @@ CREATE TABLE "drone_media" (
   "fingerprint" text NOT NULL,
   "tiny_fingerprint" text NOT NULL,
   "meta" text,
+  "captured_at" timestamptz,
+  "received_at" timestamptz NOT NULL DEFAULT (now()),
   "coverage" text,
-  "coverage_generated_at" timestamptz NOT NULL DEFAULT (now())
+  "coverage_generated_at" timestamptz NOT NULL DEFAULT (now()),
+  "camera_location" text,
+  "camera_angles" text
 );
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';

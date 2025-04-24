@@ -129,10 +129,27 @@ Table drone_media {
   fingerprint text [not null]
   tiny_fingerprint text [not null]
   meta text//json encoded meta data
+  captured_at timestamptz
+  received_at timestamptz [not null, default: `now()`]// when stored in db
   coverage text//json encoded coverage data
   coverage_generated_at timestamptz [not null, default: `now()`]
+  camera_location text//json encoded {position: {longitude: number, latitude: number}, height: number}
+  camera_angles text//json encoded {heading: number, pitch: number, roll: number}
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
 Ref: drone_media.flight_id > flights.id
 
+/*
+Table workspace_map_elements {
+  id serial [primary key, not null]
+  uuid text [not null, unique]
+  workspace_id integer [not null]
+  connection_id integer [not null]
+  name text [not null]
+  type integer [not null]
+  content text [not null] // json
+}
+Ref: workspace_map_elements.workspace_id > workspaces.id
+Ref: workspace_map_elements.connection_id > connections.id
+*/
