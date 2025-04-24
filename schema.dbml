@@ -35,8 +35,8 @@ Ref: files.created_by > users.id
 Table workspaces {
   id serial [primary key, not null]
   name text [not null]
-  longitude float [not null]
-  latitude float [not null]
+  longitude number [not null]
+  latitude number [not null]
 }
 
 Table workspace_permissions {
