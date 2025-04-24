@@ -29,8 +29,8 @@ CREATE TABLE "files" (
 CREATE TABLE "workspaces" (
   "id" serial PRIMARY KEY NOT NULL,
   "name" text NOT NULL,
-  "longitude" number NOT NULL,
-  "latitude" number NOT NULL
+  "longitude" double precision NOT NULL,
+  "latitude" double precision NOT NULL
 );
 
 CREATE TABLE "workspace_permissions" (
