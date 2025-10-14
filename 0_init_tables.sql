@@ -19,12 +19,18 @@ CREATE TABLE "files" (
   "ext" text NOT NULL,
   "name" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "created_by" integer NOT NULL
+  "created_by" integer NOT NULL,
+  "has_thumbnail" boolean NOT NULL DEFAULT false,
+  "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false,
+  "exif_data" text,
+  "exif_data_generation_has_failed" boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE "workspaces" (
   "id" serial PRIMARY KEY NOT NULL,
-  "name" text NOT NULL
+  "name" text NOT NULL,
+  "longitude" float8 NOT NULL,
+  "latitude" float8 NOT NULL
 );
 
 CREATE TABLE "workspace_permissions" (
@@ -41,20 +47,40 @@ CREATE TABLE "connections" (
   "workspace_id" integer NOT NULL,
   "workspace_uuid" text NOT NULL,
   "remote_controller_id" integer,
-  "drone_id" integer
+  "last_drone_id" integer
 );
 
 CREATE TABLE "remote_controllers" (
   "id" serial PRIMARY KEY NOT NULL,
-  "serial_number" text NOT NULL,
+  "serial_number" text UNIQUE NOT NULL,
   "type" integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE "drones" (
   "id" serial PRIMARY KEY NOT NULL,
-  "serial_number" text NOT NULL,
+  "serial_number" text UNIQUE NOT NULL,
   "name" text NOT NULL,
-  "type" integer NOT NULL DEFAULT 0
+  "type" integer NOT NULL DEFAULT 0,
+  "last_connection_id" integer,
+  "current_flight_id" integer,
+  "in_flight" boolean NOT NULL DEFAULT false
+);
+
+CREATE TABLE "flights" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "drone_id" integer NOT NULL,
+  "started_at" timestamptz NOT NULL DEFAULT (now()),
+  "landed_at" timestamptz,
+  "ended_at" timestamptz
+);
+
+CREATE TABLE "flight_data" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "flight_id" integer NOT NULL,
+  "received_at" timestamptz NOT NULL DEFAULT (now()),
+  "created_at" timestamptz NOT NULL,
+  "type" integer NOT NULL,
+  "data" jsonb NOT NULL
 );
 
 CREATE TABLE "remote_controller_data" (
@@ -68,6 +94,7 @@ CREATE TABLE "remote_controller_data" (
 CREATE TABLE "drone_data" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
+  "flight_id" integer NOT NULL,
   "type" integer NOT NULL DEFAULT 0,
   "data" jsonb NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -76,11 +103,18 @@ CREATE TABLE "drone_data" (
 CREATE TABLE "drone_media" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
+  "flight_id" integer NOT NULL,
   "type" integer NOT NULL,
   "file_id" integer NOT NULL,
   "fingerprint" text NOT NULL,
   "tiny_fingerprint" text NOT NULL,
-  "meta" text
+  "meta" text,
+  "captured_at" timestamptz,
+  "received_at" timestamptz NOT NULL DEFAULT (now()),
+  "coverage" text,
+  "coverage_generated_at" timestamptz NOT NULL DEFAULT (now()),
+  "camera_location" text,
+  "camera_angles" text
 );
 
 CREATE TABLE "workspace_map_elements" (
@@ -95,9 +129,11 @@ CREATE TABLE "workspace_map_elements" (
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
-COMMENT ON COLUMN "remote_controllers"."type" IS '0 = dji rc pro enterprise, 1 = dji rc plus';
+COMMENT ON COLUMN "remote_controllers"."type" IS '0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller';
 
-COMMENT ON COLUMN "drones"."type" IS '0 = dji mavic 3';
+COMMENT ON COLUMN "drones"."type" IS '0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3';
+
+COMMENT ON COLUMN "flight_data"."type" IS '0 = position';
 
 COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
 
@@ -117,11 +153,21 @@ ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspace
 
 ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
-ALTER TABLE "connections" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+ALTER TABLE "connections" ADD FOREIGN KEY ("last_drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connections" ("id");
+
+ALTER TABLE "drones" ADD FOREIGN KEY ("current_flight_id") REFERENCES "flights" ("id");
+
+ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
 
 ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
 
 ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "drone_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
 
@@ -130,3 +176,5 @@ ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
 ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 
 ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("connection_id") REFERENCES "connections" ("id");
+
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");

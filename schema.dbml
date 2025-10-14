@@ -23,6 +23,10 @@ Table files {
   name text [not null] // full original name including extension
   created_at timestamptz [not null, default: `now()`]
   created_by integer [not null]
+  has_thumbnail boolean [not null, default: false]
+  thumbnail_generation_has_failed boolean [not null, default: false]
+  exif_data text//json encoded exif data
+  exif_data_generation_has_failed boolean [not null, default: false]
 }
 Ref: files.workspace_id > workspaces.id
 Ref: files.created_by > users.id
@@ -31,6 +35,8 @@ Ref: files.created_by > users.id
 Table workspaces {
   id serial [primary key, not null]
   name text [not null]
+  longitude float8 [not null]
+  latitude float8 [not null]
 }
 
 Table workspace_permissions {
@@ -48,26 +54,50 @@ Table connections {
   workspace_id integer [not null]
   workspace_uuid text [not null]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
-  drone_id integer
+  last_drone_id integer // the "currently" connected drone (does not mean that the drone is currently online)
 }
 Ref: connections.workspace_id > workspaces.id
 Ref: connections.remote_controller_id > remote_controllers.id
-Ref: connections.drone_id > drones.id
+Ref: connections.last_drone_id > drones.id
 
 
 Table remote_controllers {
   id serial [primary key, not null]
-  serial_number text [not null]
-  type integer [not null, default: 0, note: "0 = dji rc pro enterprise, 1 = dji rc plus"]
+  serial_number text [not null, unique]
+  type integer [not null, default: 0, note: "0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller"]
 }
 
 Table drones {
   id serial [primary key, not null]
-  serial_number text [not null]
+  serial_number text [not null, unique]
   name text [not null]
-  type integer [not null, default: 0, note: "0 = dji mavic 3"]
+  type integer [not null, default: 0, note: "0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3"]
+  last_connection_id integer
+  current_flight_id integer // should never every be null
+  in_flight boolean [not null, default: false]
 }
+Ref: drones.last_connection_id > connections.id
+Ref: drones.current_flight_id > flights.id
 
+
+Table flights {
+  id serial [primary key, not null]
+  drone_id integer [not null]
+  started_at timestamptz [not null, default: `now()`]
+  landed_at timestamptz// when drone lands
+  ended_at timestamptz
+}
+Ref: flights.drone_id > drones.id
+
+Table flight_data {
+  id serial [primary key, not null]
+  flight_id integer [not null]
+  received_at timestamptz [not null, default: `now()`]// when stored in db
+  created_at timestamptz [not null]// when drone created the data
+  type integer [not null, note: "0 = position"]
+  data jsonb [not null]
+}
+Ref: flight_data.flight_id > flights.id
 
 Table remote_controller_data {
   id serial [primary key, not null]
@@ -81,24 +111,34 @@ Ref: remote_controller_data.remote_controller_id > remote_controllers.id
 Table drone_data {
   id serial [primary key, not null]
   drone_id integer [not null]
+  flight_id integer [not null]
   type integer [not null, default: 0, note: "0 = position, 1 = telemetry"]
   data jsonb [not null]
   created_at timestamptz [not null, default: `now()`]
 }
 Ref: drone_data.drone_id > drones.id
+Ref: drone_data.flight_id > flights.id
 
 
 Table drone_media {
   id serial [primary key, not null]
   drone_id integer [not null]
+  flight_id integer [not null]
   type integer [not null, note: "0 = video, 1 = picture, 2 = panorama"]
   file_id integer [not null]
   fingerprint text [not null]
   tiny_fingerprint text [not null]
   meta text//json encoded meta data
+  captured_at timestamptz
+  received_at timestamptz [not null, default: `now()`]// when stored in db
+  coverage text//json encoded coverage data
+  coverage_generated_at timestamptz [not null, default: `now()`]
+  camera_location text//json encoded {position: {longitude: number, latitude: number}, height: number}
+  camera_angles text//json encoded {heading: number, pitch: number, roll: number}
 }
 Ref: drone_media.drone_id > drones.id
 Ref: drone_media.file_id > files.id
+Ref: drone_media.flight_id > flights.id
 
 Table workspace_map_elements {
   id serial [primary key, not null]
