@@ -1,0 +1,1 @@
+ALTER ROLE api PASSWORD '199as8d8727aksd772sd';
