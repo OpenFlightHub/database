@@ -124,7 +124,9 @@ CREATE TABLE "workspace_map_elements" (
   "connection_id" integer NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL,
-  "content" text NOT NULL
+  "content" text NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
@@ -140,6 +142,8 @@ COMMENT ON COLUMN "remote_controller_data"."type" IS '0 = todo';
 COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = telemetry';
 
 COMMENT ON COLUMN "drone_media"."type" IS '0 = video, 1 = picture, 2 = panorama';
+
+COMMENT ON COLUMN "workspace_map_elements"."type" IS '0 = point, 1 = line, 2 = polygon';
 
 ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 
@@ -173,8 +177,8 @@ ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id"
 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
 
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
+
 ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 
 ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("connection_id") REFERENCES "connections" ("id");
-
-ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
