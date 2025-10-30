@@ -117,13 +117,14 @@ CREATE TABLE "drone_media" (
   "camera_angles" text
 );
 
-CREATE TABLE "workspace_map_elements" (
+CREATE TABLE "geo_objects" (
   "id" serial PRIMARY KEY NOT NULL,
   "uuid" text UNIQUE NOT NULL,
   "workspace_id" integer NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL,
-  "content" text NOT NULL,
+  "sub_type" integer NOT NULL,
+  "config" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
@@ -142,7 +143,9 @@ COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = telemetry';
 
 COMMENT ON COLUMN "drone_media"."type" IS '0 = video, 1 = picture, 2 = panorama';
 
-COMMENT ON COLUMN "workspace_map_elements"."type" IS '0 = point, 1 = line, 2 = polygon, 7 = circle';
+COMMENT ON COLUMN "geo_objects"."type" IS '0 = marking, 1 = traffic, 2 = unit';
+
+COMMENT ON COLUMN "geo_objects"."sub_type" IS 'marking: 0 = point, 1 = line, 2 = polygon, 3 = circle; traffic: 1 = airplane, 2 = helicopter, 3 = uav, 4 = gliding, 5 = other; unit: 1 = aircraft, 2 = helicopter, 3 = uav, 4 = pilot, 5 = ground_vehicle, 6 = ground_staff, 7 = other';
 
 ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 
@@ -178,4 +181,4 @@ ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
 
-ALTER TABLE "workspace_map_elements" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "geo_objects" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
