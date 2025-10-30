@@ -119,7 +119,7 @@ CREATE TABLE "drone_media" (
 
 CREATE TABLE "geo_objects" (
   "id" serial PRIMARY KEY NOT NULL,
-  "uuid" text UNIQUE NOT NULL,
+  "uuid" text UNIQUE NOT NULL DEFAULT (uuid_generate_v4()),
   "workspace_id" integer NOT NULL,
   "name" text NOT NULL,
   "type" integer NOT NULL,

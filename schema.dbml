@@ -143,7 +143,7 @@ Ref: drone_media.flight_id > flights.id
 
 Table geo_objects {
   id serial [primary key, not null]
-  uuid text [not null, unique]
+  uuid text [not null, unique, default: `uuid_generate_v4()`]
   workspace_id integer [not null]
   name text [not null]
   type integer [not null, note: "0 = marking, 1 = traffic, 2 = unit"]
