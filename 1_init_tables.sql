@@ -124,7 +124,7 @@ CREATE TABLE "geo_objects" (
   "name" text NOT NULL,
   "type" integer NOT NULL,
   "sub_type" integer NOT NULL,
-  "config" text NOT NULL,
+  "config" json NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
@@ -143,9 +143,76 @@ COMMENT ON COLUMN "drone_data"."type" IS '0 = position, 1 = telemetry';
 
 COMMENT ON COLUMN "drone_media"."type" IS '0 = video, 1 = picture, 2 = panorama';
 
-COMMENT ON COLUMN "geo_objects"."type" IS '0 = marking, 1 = traffic, 2 = unit';
+COMMENT ON TABLE "geo_objects" IS '[TypescriptType]=
 
-COMMENT ON COLUMN "geo_objects"."sub_type" IS 'marking: 0 = point, 1 = line, 2 = polygon, 3 = circle; traffic: 1 = airplane, 2 = helicopter, 3 = uav, 4 = gliding, 5 = other; unit: 1 = aircraft, 2 = helicopter, 3 = uav, 4 = pilot, 5 = ground_vehicle, 6 = ground_staff, 7 = other';
+export type DBType_Geo_Object = DBType_Geo_Object_Base<0, 0> | DBType_Geo_Object_Base<0, 1> | DBType_Geo_Object_Base<0, 2> | DBType_Geo_Object_Base<0, 3> |
+DBType_Geo_Object_Base<1, 0> | DBType_Geo_Object_Base<1, 1> | DBType_Geo_Object_Base<1, 2> | DBType_Geo_Object_Base<1, 3> | DBType_Geo_Object_Base<1, 4> |
+DBType_Geo_Object_Base<2, 0> | DBType_Geo_Object_Base<2, 1> | DBType_Geo_Object_Base<2, 2> | DBType_Geo_Object_Base<2, 3> | DBType_Geo_Object_Base<2, 4> | DBType_Geo_Object_Base<2, 5> | DBType_Geo_Object_Base<2, 6>
+
+export type DBType_Geo_Object_Base<type extends DBType_Geo_Object_TypeType, sub_type extends DBType_Geo_Object_SubTypeType<type>> = {
+    id: number;
+    uuid: string;
+    workspace_id: number;
+    name: string;
+    type: type;
+    sub_type: sub_type;
+    config: DBType_Geo_Object_ConfigType<type, sub_type>;
+    created_at: string;
+    updated_at: string;
+}
+
+
+export type DBType_Geo_Object_TypeType = 0|1|2
+
+export const DBType_Geo_Object_Type_TYPES = {
+  marking: 0,
+  traffic: 1,
+  unit: 2
+} as const
+
+export type DBType_Geo_Object_SubTypeType<type extends DBType_Geo_Object_TypeType> =
+    type extends 0 ? (0|1|2|3) :
+    type extends 1 ? (0|1|2|3|4|5) :
+    type extends 2 ? (0|1|2|3|4|5|6) : unknown
+
+
+export const DBType_Geo_Object_SubType_TYPES = {
+  marking: {
+    point: 0,
+    line: 1,
+    polygon: 2,
+    circle: 3
+  },
+  traffic: {
+    airplane: 0,
+    helicopter: 1,
+    uav: 2,
+    gliding: 3,
+    other: 4
+  },
+  unit: {
+    airplane: 0,
+    helicopter: 1,
+    uav: 2,
+    pilot: 3,
+    ground_vehicle: 4,
+    ground_staff: 5,
+    other: 6
+  }
+} as const
+
+export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType, sub_type extends DBType_Geo_Object_SubTypeType<type>> = type extends 0 ? (
+    sub_type extends 0 ? {point: [number, number, number], color: string} :
+    sub_type extends 1 ? {line: [number, number, number][], color: string} :
+    sub_type extends 2 ? {polygon: [number, number, number][], color: string} :
+    sub_type extends 3 ? {center: [number, number, number], radius: number, color: string} : unknown
+) : type extends 1 ? (
+    {longitude: number, latitude: number, height: number, heading?: number, speed?: number}
+) : type extends 2 ? (
+    {longitude: number, latitude: number, symbol: string, height?: number, heading?: number, speed?: number}
+) : unknown
+
+  ';
 
 ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 

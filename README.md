@@ -62,7 +62,11 @@ then export psql and save it as `0_init_tables.sql`
 
 ## Special rules:
 
-### columns that are integers but only allow specific values (e.g. state)
+### States
+
+You can define specific values for integer columns, which the definition-generation repo will compile into TypeScript constants and types.
+
+#### columns that are integers but only allow specific values (e.g. state)
 mark those columns with [note: "0 = state a, 1 = state b"]
 
 When running the "generate db types and schemes" script is executed, special typescript types and constants will be created so you dont have to manually write those numbers
@@ -70,6 +74,14 @@ When running the "generate db types and schemes" script is executed, special typ
 **Syntax Rules:**
 * `,` seperates states
 * `=` seperates state value and state name
+
+#### columns that are integers that depend on one or multiple state-like columns
+
+You can use the `note` attribute and a json to define the behaviour
+
+```js
+JSON.stringify(YOUR_DEFINITION_HERE).replace(/\n/g, '').replace(/(?<!\\)"/g, "'")
+```
 
 # Performance and Debugging
 
@@ -115,3 +127,4 @@ more on databases:
 # PG Admin
 
 To setup pg admin, use an ssh tunnel. And make sure as an identity/private key file, you dont use putty .pkk file, but instead open Puttygen, and export that key as openssh format
+
