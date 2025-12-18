@@ -95,23 +95,27 @@ INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, ti
 INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta, camera_location, camera_angles) VALUES (2, 1, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json, '{"position":{"longitude": 10.18527063888889, "latitude": 47.53088863888889}, "height": 1799}'::json, '{"heading": 136.6, "pitch": -15.8, "roll": 0}'::json);
 
 
+-- units
 
 -- geo_objects #1
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (1, 1, 'Unit 1', 2, 0, '{"longitude": 10.22, "latitude": 47.56, "symbol": "/images/units/airplane.png", "height": 890, "heading": 45, "speed": 35}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (1, 1, 'Unit 1', 2, 0, '{"longitude": 10.22, "latitude": 47.56, "symbol": "/images/geo_objects/units/0.png", "height": 890, "heading": 45, "speed": 35}'::json);
 -- geo_objects #2
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (2, 1, 'Unit 2', 2, 1, '{"longitude": 10.23, "latitude": 47.56, "symbol": "/images/units/helicopter.png", "height": 820, "heading": 78, "speed": 15}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (2, 1, 'Unit 2', 2, 1, '{"longitude": 10.23, "latitude": 47.56, "symbol": "/images/geo_objects/units/1.png", "height": 820, "heading": 78, "speed": 15}'::json);
 -- geo_objects #3
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (3, 1, 'Unit 3', 2, 2, '{"longitude": 10.24, "latitude": 47.56, "symbol": "/images/units/uav.png", "height": 780, "heading": 95, "speed": 5}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (3, 1, 'Unit 3', 2, 2, '{"longitude": 10.24, "latitude": 47.56, "symbol": "/images/geo_objects/units/2.png", "height": 780, "heading": 95, "speed": 5}'::json);
 -- geo_objects #4
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (4, 1, 'Unit 4', 2, 3, '{"longitude": 10.25, "latitude": 47.56, "symbol": "/images/units/pilot.png", "height": 760, "heading": 10, "speed": 0}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (4, 1, 'Unit 4', 2, 3, '{"longitude": 10.25, "latitude": 47.56, "symbol": "/images/geo_objects/units/3.png", "height": 760, "heading": 10, "speed": 0}'::json);
 -- geo_objects #5
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (5, 1, 'Unit 5', 2, 4, '{"longitude": 10.26, "latitude": 47.56, "symbol": "/images/units/ground_vehicle.png", "height": 0, "heading": 270, "speed": 50}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (5, 1, 'Unit 5', 2, 4, '{"longitude": 10.26, "latitude": 47.56, "symbol": "/images/geo_objects/units/4.png", "height": 0, "heading": 270, "speed": 50}'::json);
 -- geo_objects #6
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (6, 1, 'Unit 6', 2, 5, '{"longitude": 10.27, "latitude": 47.56, "symbol": "/images/units/ground_staff.png", "height": 0, "heading": 170, "speed": 50}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (6, 1, 'Unit 6', 2, 5, '{"longitude": 10.27, "latitude": 47.56, "symbol": "/images/geo_objects/units/5.png", "height": 0, "heading": 170, "speed": 50}'::json);
 -- geo_objects #7
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (7, 1, 'Unit 7', 2, 6, '{"longitude": 10.28, "latitude": 47.56, "symbol": "/images/units/other.png", "height": 0, "heading": 290, "speed": 0}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (7, 1, 'Unit 7', 2, 6, '{"longitude": 10.28, "latitude": 47.56, "symbol": "/images/geo_objects/units/6.png", "height": 0, "heading": 290, "speed": 0}'::json);
 
+-- traffic
 
+-- geo_objects #8
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (8, 1, 'Traffic 1', 1, 0, '{"longitude": 10.22, "latitude": 47.54, "height": 1001, "heading": 160, "speed": 135}'::json);
 
 -- FIX all id sequences
 SELECT setval('users_id_seq', 5, true);
@@ -124,6 +128,6 @@ SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 2, true);
 SELECT setval('files_id_seq', 2, true);
 SELECT setval('drone_media_id_seq', 2, true);
-SELECT setval('geo_objects_id_seq', 7, true);
+SELECT setval('geo_objects_id_seq', 8, true);
 
 
