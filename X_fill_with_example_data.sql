@@ -18,8 +18,12 @@ INSERT INTO users (id, name, email, email_hash, password) VALUES (4, 'Dev', 'mai
 INSERT INTO users (id, name, email, email_hash, password) VALUES (5, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
 
 
+-- workspaces #0 system (backup workspace in case drone connection has no current connection (should never happen))
+INSERT INTO workspaces (id, name, longitude, latitude) VALUES (0, 'System', 10, 47);
 -- workspaces #1
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (1, 'Test Usage Example', 10.270800, 47.563710);
+-- grant permissions for user 0
+INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (0, 0);
 -- grant permissions for user 1
 INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 1);
 -- grant permissions for user 4
@@ -35,7 +39,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (1, 'RC_FAKE');
 INSERT INTO drones (id, serial_number, name) VALUES (1, 'DRONE_FAKE', 'Fake Mavic 3');
 
 -- flights #1
-INSERT INTO flights (id, drone_id) VALUES (1, 1);
+INSERT INTO flights (id, drone_id, workspace_id) VALUES (1, 1, 1);
 
 UPDATE drones SET current_flight_id = 1 WHERE id = 1;
 
@@ -62,7 +66,7 @@ INSERT INTO remote_controllers (id, serial_number) VALUES (2, 'RC_EXAMPLE');
 INSERT INTO drones (id, serial_number, name) VALUES (2, 'DRONE_EXAMPLE', 'Example Mavic 3');
 
 -- flights #2
-INSERT INTO flights (id, drone_id) VALUES (2, 2);
+INSERT INTO flights (id, drone_id, workspace_id) VALUES (2, 2, 1);
 
 UPDATE drones SET current_flight_id = 2 WHERE id = 2;
 
@@ -89,6 +93,24 @@ INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, ti
 INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta, camera_location, camera_angles) VALUES (2, 1, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json, '{"position":{"longitude": 10.18527063888889, "latitude": 47.53088863888889}, "height": 1799}'::json, '{"heading": 136.6, "pitch": -15.8, "roll": 0}'::json);
 
 
+
+-- geo_objects #1
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (1, 1, 'Example Unit 1', 2, 0, '{"longitude": 10.249, "latitude": 47.559, "symbol": "/images/units/airplane.png", "height": 890, "heading": 45, "speed": 35}'::json);
+-- geo_objects #2
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (2, 1, 'Example Unit 2', 2, 1, '{"longitude": 10.248, "latitude": 47.557, "symbol": "/images/units/helicopter.png", "height": 820, "heading": 78, "speed": 15}'::json);
+-- geo_objects #3
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (3, 1, 'Example Unit 3', 2, 2, '{"longitude": 10.249, "latitude": 47.557, "symbol": "/images/units/uav.png", "height": 780, "heading": 95, "speed": 5}'::json);
+-- geo_objects #4
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (4, 1, 'Example Unit 4', 2, 3, '{"longitude": 10.248, "latitude": 47.558, "symbol": "/images/units/pilot.png", "height": 760, "heading": 10, "speed": 0}'::json);
+-- geo_objects #5
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (5, 1, 'Example Unit 5', 2, 4, '{"longitude": 10.248, "latitude": 47.559, "symbol": "/images/units/ground_vehicle.png", "height": 0, "heading": 270, "speed": 50}'::json);
+-- geo_objects #6
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (6, 1, 'Example Unit 6', 2, 5, '{"longitude": 10.246, "latitude": 47.557, "symbol": "/images/units/ground_staff.png", "height": 0, "heading": 170, "speed": 50}'::json);
+-- geo_objects #7
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (7, 1, 'Example Unit 7', 2, 6, '{"longitude": 10.247, "latitude": 47.557, "symbol": "/images/units/other.png", "height": 0, "heading": 290, "speed": 0}'::json);
+
+
+
 -- FIX all id sequences
 SELECT setval('users_id_seq', 5, true);
 SELECT setval('workspaces_id_seq', 2, true);
@@ -100,5 +122,6 @@ SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 1, true);
 SELECT setval('files_id_seq', 2, true);
 SELECT setval('drone_media_id_seq', 2, true);
+SELECT setval('geo_objects_id_seq', 7, true);
 
 

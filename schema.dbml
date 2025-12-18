@@ -52,7 +52,7 @@ Table connections {
   secret text [not null]//used as credential together with id
   session_token text
   workspace_id integer [not null]
-  workspace_uuid text [not null]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
+  workspace_uuid text [not null, unique]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
   last_drone_id integer // the "currently" connected drone (does not mean that the drone is currently online)
 }
@@ -83,11 +83,13 @@ Ref: drones.current_flight_id > flights.id
 Table flights {
   id serial [primary key, not null]
   drone_id integer [not null]
+  workspace_id integer [not null] // drones can change workspace, but this will always be the workspace_id at the time the flight was recorded
   started_at timestamptz [not null, default: `now()`]
   landed_at timestamptz// when drone lands
   ended_at timestamptz
 }
 Ref: flights.drone_id > drones.id
+Ref: flights.workspace_id > workspaces.id
 
 Table flight_data {
   id serial [primary key, not null]

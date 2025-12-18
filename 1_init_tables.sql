@@ -69,6 +69,7 @@ CREATE TABLE "drones" (
 CREATE TABLE "flights" (
   "id" serial PRIMARY KEY NOT NULL,
   "drone_id" integer NOT NULL,
+  "workspace_id" integer NOT NULL,
   "started_at" timestamptz NOT NULL DEFAULT (now()),
   "landed_at" timestamptz,
   "ended_at" timestamptz
@@ -233,6 +234,8 @@ ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connecti
 ALTER TABLE "drones" ADD FOREIGN KEY ("current_flight_id") REFERENCES "flights" ("id");
 
 ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+
+ALTER TABLE "flights" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
 
 ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
 
