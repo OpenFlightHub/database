@@ -45,7 +45,7 @@ CREATE TABLE "connections" (
   "secret" text NOT NULL,
   "session_token" text,
   "workspace_id" integer NOT NULL,
-  "workspace_uuid" text NOT NULL,
+  "workspace_uuid" text UNIQUE NOT NULL,
   "remote_controller_id" integer,
   "last_drone_id" integer
 );
