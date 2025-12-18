@@ -80,6 +80,8 @@ INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES
 
 -- drone_data #1
 INSERT INTO drone_data (id, drone_id, flight_id, type, data) VALUES (1, 2, 2, 0, '{"height": 802.2, "latitude": 47.558801, "longitude": 10.283472}'::json);
+-- drone_data #2
+INSERT INTO drone_data (id, drone_id, flight_id, type, data) VALUES (2, 2, 2, 1, '{"capacity_percent_left": 2}'::json);
 
 
 -- files #1
@@ -119,7 +121,7 @@ SELECT setval('drones_id_seq', 2, true);
 SELECT setval('flights_id_seq', 2, true);
 SELECT setval('connections_id_seq', 2, true);
 SELECT setval('remote_controller_data_id_seq', 2, true);
-SELECT setval('drone_data_id_seq', 1, true);
+SELECT setval('drone_data_id_seq', 2, true);
 SELECT setval('files_id_seq', 2, true);
 SELECT setval('drone_media_id_seq', 2, true);
 SELECT setval('geo_objects_id_seq', 7, true);

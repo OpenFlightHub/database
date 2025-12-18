@@ -22,3 +22,6 @@ cat 3_setup_triggers.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 -
 
 cat X_fill_with_example_data.sql | docker exec -i ofh-database psql -v ON_ERROR_STOP=1 --dbname=postgresql://ofh:ofh@localhost:5432
 
+echo ""
+
+read -n 1 -s -r -p "Press any key to continue"
