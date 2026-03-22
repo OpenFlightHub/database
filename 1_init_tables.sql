@@ -1,5 +1,6 @@
 CREATE TABLE "users" (
   "id" serial PRIMARY KEY NOT NULL,
+  "team_id" integer NOT NULL,
   "name" text NOT NULL,
   "email" text NOT NULL,
   "email_hash" text NOT NULL,
@@ -8,6 +9,15 @@ CREATE TABLE "users" (
   "session_token" text,
   "stream_token" text,
   "reset_code" text,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "state" integer NOT NULL DEFAULT 0,
+  "locale" text NOT NULL DEFAULT 'en-US'
+);
+
+CREATE TABLE "teams" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "name" text NOT NULL,
+  "owner_user_id" integer NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "state" integer NOT NULL DEFAULT 0,
   "locale" text NOT NULL DEFAULT 'en-US'
@@ -34,9 +44,9 @@ CREATE TABLE "workspaces" (
 );
 
 CREATE TABLE "workspace_permissions" (
-  "user_id" integer NOT NULL,
+  "team_id" integer NOT NULL,
   "workspace_id" integer NOT NULL,
-  PRIMARY KEY ("user_id", "workspace_id")
+  PRIMARY KEY ("team_id", "workspace_id")
 );
 
 CREATE TABLE "connections" (
@@ -47,7 +57,8 @@ CREATE TABLE "connections" (
   "workspace_id" integer NOT NULL,
   "workspace_uuid" text UNIQUE NOT NULL,
   "remote_controller_id" integer,
-  "last_drone_id" integer
+  "last_drone_id" integer,
+  "stream_is_alive" boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE "remote_controllers" (
@@ -132,6 +143,8 @@ CREATE TABLE "geo_objects" (
 
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
+COMMENT ON COLUMN "teams"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
+
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller';
 
 COMMENT ON COLUMN "drones"."type" IS '0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3';
@@ -215,40 +228,44 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
 
   ';
 
-ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "files" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id");
+ALTER TABLE "teams" ADD FOREIGN KEY ("owner_user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "files" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
+ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "connections" ADD FOREIGN KEY ("last_drone_id") REFERENCES "drones" ("id");
+ALTER TABLE "connections" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connections" ("id");
+ALTER TABLE "connections" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drones" ADD FOREIGN KEY ("current_flight_id") REFERENCES "flights" ("id");
+ALTER TABLE "connections" ADD FOREIGN KEY ("last_drone_id") REFERENCES "drones" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+ALTER TABLE "drones" ADD FOREIGN KEY ("last_connection_id") REFERENCES "connections" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "flights" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "drones" ADD FOREIGN KEY ("current_flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
+ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id");
+ALTER TABLE "flights" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drone_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
+ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id");
+ALTER TABLE "drone_data" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id");
+ALTER TABLE "drone_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id");
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE "geo_objects" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id");
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "geo_objects" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;

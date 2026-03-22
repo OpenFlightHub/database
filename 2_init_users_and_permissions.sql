@@ -14,6 +14,8 @@ CREATE ROLE api WITH
 GRANT USAGE ON SCHEMA public TO api;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO api;
 GRANT USAGE ON SEQUENCE public.users_id_seq TO api;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.teams TO api;
+GRANT USAGE ON SEQUENCE public.teams_id_seq TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.files TO api;
 GRANT USAGE ON SEQUENCE public.files_id_seq TO api;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.workspaces TO api;

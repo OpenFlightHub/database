@@ -3,6 +3,7 @@
 
 Table users {
   id serial [primary key, not null]
+  team_id integer [not null]
   name text [not null]
   email text [not null] //encrypted
   email_hash text [not null] //bcrypt hash
@@ -15,6 +16,17 @@ Table users {
   state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
   locale text [not null, default: 'en-US']
 }
+Ref: users.team_id > teams.id
+
+Table teams {
+  id serial [primary key, not null]
+  name text [not null]
+  owner_user_id integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
+  locale text [not null, default: 'en-US']
+}
+Ref: teams.owner_user_id > users.id
 
 Table files {
   id serial [primary key, not null]
@@ -40,10 +52,10 @@ Table workspaces {
 }
 
 Table workspace_permissions {
-  user_id integer [primary key, not null]
+  team_id integer [primary key, not null]
   workspace_id integer [primary key, not null]
 }
-Ref: workspace_permissions.user_id > users.id
+Ref: workspace_permissions.team_id > teams.id
 Ref: workspace_permissions.workspace_id > workspaces.id
 
 Table connections {
@@ -55,6 +67,7 @@ Table connections {
   workspace_uuid text [not null, unique]// used for dji pilot 2 communication, format: xxxxxxxx-0000-42ae-84e6-123456789abc where xxx is the workspace_id like "00000001", the rest is random
   remote_controller_id integer
   last_drone_id integer // the "currently" connected drone (does not mean that the drone is currently online)
+  stream_is_alive boolean [not null, default: false]
 }
 Ref: connections.workspace_id > workspaces.id
 Ref: connections.remote_controller_id > remote_controllers.id
