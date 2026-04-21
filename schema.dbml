@@ -3,7 +3,7 @@
 
 Table users {
   id serial [primary key, not null]
-  team_id integer [not null]
+  team_id integer
   name text [not null]
   email text [not null] //encrypted
   email_hash text [not null] //bcrypt hash

@@ -1,6 +1,6 @@
 CREATE TABLE "users" (
   "id" serial PRIMARY KEY NOT NULL,
-  "team_id" integer NOT NULL,
+  "team_id" integer,
   "name" text NOT NULL,
   "email" text NOT NULL,
   "email_hash" text NOT NULL,

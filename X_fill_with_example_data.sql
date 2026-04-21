@@ -17,19 +17,43 @@ INSERT INTO users (id, name, email, email_hash, password) VALUES (4, 'Dev', 'mai
 -- users #5 (for example usage) password = CorrectBatteryHorseStaple
 INSERT INTO users (id, name, email, email_hash, password) VALUES (5, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
 
+-- teams #0
+INSERT INTO teams (id, name, owner_user_id) VALUES (0, 'system', 0);
+UPDATE users set team_id = 0 WHERE id = 0;
+
+-- teams #1
+INSERT INTO teams (id, name, owner_user_id) VALUES (1, 'test', 1);
+UPDATE users set team_id = 1 WHERE id = 1;
+
+-- teams #2
+INSERT INTO teams (id, name, owner_user_id) VALUES (2, 'test_api_1', 2);
+UPDATE users set team_id = 2 WHERE id = 2;
+
+-- teams #3
+INSERT INTO teams (id, name, owner_user_id) VALUES (3, 'test_api_2', 3);
+UPDATE users set team_id = 3 WHERE id = 4;
+
+-- teams #4
+INSERT INTO teams (id, name, owner_user_id) VALUES (4, 'dev', 4);
+UPDATE users set team_id = 4 WHERE id = 4;
+
+-- teams #5
+INSERT INTO teams (id, name, owner_user_id) VALUES (5, 'edp', 5);
+UPDATE users set team_id = 5 WHERE id = 5;
+
 
 -- workspaces #0 system (backup workspace in case drone connection has no current connection (should never happen))
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (0, 'System', 10, 47);
 -- workspaces #1
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (1, 'Test Usage Example', 10.270800, 47.563710);
--- grant permissions for user 0
-INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (0, 0);
--- grant permissions for user 1
-INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 1);
--- grant permissions for user 4
-INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 4);
--- grant permissions for user 5
-INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (1, 5);
+-- grant permissions for team 0
+INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (0, 0);
+-- grant permissions for team 1
+INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (1, 1);
+-- grant permissions for team 4
+INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (1, 4);
+-- grant permissions for team 5
+INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (1, 5);
 
 
 -- remote_controllers #1
@@ -55,8 +79,8 @@ INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES
 
 -- workspaces #2
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (2, 'Some Workspace', 10.294488, 47.629693);
--- grant permissions for user 4
-INSERT INTO workspace_permissions (workspace_id, user_id) VALUES (2, 4);
+-- grant permissions for team 4
+INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (2, 4);
 
 
 -- remote_controllers #2
