@@ -1,51 +1,64 @@
 
 -- users #0 (the system user)
-INSERT INTO users (id, name, email, email_hash) VALUES (0, 'system', '', '');
+INSERT INTO users (id, created_by_user_id, name, email, email_hash) VALUES (0, 0, 'system', '', '');
 
 -- users #1 (for example usage) password = 1234
-INSERT INTO users (id, name, email, email_hash, password) VALUES (1, 'test', 'test@openflighthub.org', '', '64$65536$8$1$o01tZR9QKBZbfXHtgCsHjSJfWHZwitNYhuYKGYO8RVQ=$55PAX9JDYsNPGNFXOOgdCNeZ7A/tPYD5jHvFoMbqw7BlJN+HY3g1cO9X/Nt5uHevNBidUBQOKDSWlCNbVPBDKg==');
+INSERT INTO users (id, created_by_user_id, name, email, email_hash, password) VALUES (1, 0, 'test', 'test@openflighthub.org', '', '64$65536$8$1$o01tZR9QKBZbfXHtgCsHjSJfWHZwitNYhuYKGYO8RVQ=$55PAX9JDYsNPGNFXOOgdCNeZ7A/tPYD5jHvFoMbqw7BlJN+HY3g1cO9X/Nt5uHevNBidUBQOKDSWlCNbVPBDKg==');
 
 -- users #2 (for api tests) password = CorrectBatteryHorseStaple
-INSERT INTO users (id, name, email, email_hash, password, session_token) VALUES (2, 'test_api_1', 'test_api_1@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', 'session_2');
+INSERT INTO users (id, created_by_user_id, name, email, email_hash, password, session_token) VALUES (2, 0, 'test_api_1', 'test_api_1@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', 'session_2');
 
 -- users #3 (for api tests) password = CorrectBatteryHorseStaple
-INSERT INTO users (id, name, email, email_hash, password, login_token) VALUES (3, 'test_api_2', 'test_api_2@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', '39s7h17sd76g1sd');
+INSERT INTO users (id, created_by_user_id, name, email, email_hash, password, login_token) VALUES (3, 0, 'test_api_2', 'test_api_2@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==', '39s7h17sd76g1sd');
 
 -- users #4 dev account password = ofh
-INSERT INTO users (id, name, email, email_hash, password) VALUES (4, 'Dev', 'mail@openflighthub.org', '', '64$65536$8$1$lk/s/aij4pLpEFK7eF2iIkFD1vxNYpipvVz9uTBqJUI=$ouhy3I2GXduGM8m8HY1/XszNonxy7oYJYnv9lx6BcfUH2AKUxgfeM9qnAVuSs9cYjaFDuN0Awt8RHjBOkgnhLg==');
+INSERT INTO users (id, created_by_user_id, name, email, email_hash, password) VALUES (4, 0, 'Dev', 'mail@openflighthub.org', '', '64$65536$8$1$lk/s/aij4pLpEFK7eF2iIkFD1vxNYpipvVz9uTBqJUI=$ouhy3I2GXduGM8m8HY1/XszNonxy7oYJYnv9lx6BcfUH2AKUxgfeM9qnAVuSs9cYjaFDuN0Awt8RHjBOkgnhLg==');
 
 -- users #5 (for example usage) password = CorrectBatteryHorseStaple
-INSERT INTO users (id, name, email, email_hash, password) VALUES (5, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
-
--- teams #0
-INSERT INTO teams (id, name, owner_user_id) VALUES (0, 'system', 0);
-UPDATE users set team_id = 0 WHERE id = 0;
-
--- teams #1
-INSERT INTO teams (id, name, owner_user_id) VALUES (1, 'test', 1);
-UPDATE users set team_id = 1 WHERE id = 1;
-
--- teams #2
-INSERT INTO teams (id, name, owner_user_id) VALUES (2, 'test_api_1', 2);
-UPDATE users set team_id = 2 WHERE id = 2;
-
--- teams #3
-INSERT INTO teams (id, name, owner_user_id) VALUES (3, 'test_api_2', 3);
-UPDATE users set team_id = 3 WHERE id = 4;
-
--- teams #4
-INSERT INTO teams (id, name, owner_user_id) VALUES (4, 'dev', 4);
-UPDATE users set team_id = 4 WHERE id = 4;
-
--- teams #5
-INSERT INTO teams (id, name, owner_user_id) VALUES (5, 'edp', 5);
-UPDATE users set team_id = 5 WHERE id = 5;
+INSERT INTO users (id, created_by_user_id, name, email, email_hash, password) VALUES (5, 0, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
 
 
 -- workspaces #0 system (backup workspace in case drone connection has no current connection (should never happen))
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (0, 'System', 10, 47);
 -- workspaces #1
 INSERT INTO workspaces (id, name, longitude, latitude) VALUES (1, 'Test Usage Example', 10.270800, 47.563710);
+
+-- files #1
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20230608135046_0004_T.JPG', 'JPG', 1);
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (3, 1, 'logo_small.png', 'png', 0);
+
+-- organisations #0
+INSERT INTO organisations (id, name, owner_user_id, logo_file_id) VALUES (0, 'system', 0, 3);
+
+-- organisations #1
+INSERT INTO organisations (id, name, owner_user_id) VALUES (1, 'edp', 5);
+
+
+-- teams #0
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (0, 'system', 0, 0);
+UPDATE users set team_id = 0 WHERE id = 0;
+
+-- teams #1
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (1, 'test', 1, 0);
+UPDATE users set team_id = 1 WHERE id = 1;
+
+-- teams #2
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (2, 'test_api_1', 2, 0);
+UPDATE users set team_id = 2 WHERE id = 2;
+
+-- teams #3
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (3, 'test_api_2', 3, 0);
+UPDATE users set team_id = 3 WHERE id = 4;
+
+-- teams #4
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (4, 'dev', 4, 0);
+UPDATE users set team_id = 4 WHERE id = 4;
+
+-- teams #5
+INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (5, 'edp', 5, 1);
+UPDATE users set team_id = 5 WHERE id = 5;
+
 -- grant permissions for team 0
 INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (0, 0);
 -- grant permissions for team 1
@@ -108,16 +121,11 @@ INSERT INTO drone_data (id, drone_id, flight_id, type, data) VALUES (1, 2, 2, 0,
 INSERT INTO drone_data (id, drone_id, flight_id, type, data) VALUES (2, 2, 2, 1, '{"capacity_percent_left": 2}'::json);
 
 
--- files #1
-INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20230608135046_0004_T.JPG', 'JPG', 1);
-INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
-
 -- drone_media #1
 INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta, camera_location, camera_angles) VALUES (1, 1, 1, 1, 1, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"38d9729c9c99ca866cb5e2a0937bce55_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.156,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.4,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889,"lng":10.18527063888889}}}'::json, '{"position":{"longitude": 10.18527063888889, "latitude": 47.53088863888889}, "height": 1799}'::json, '{"heading": 136.6, "pitch": -15.8, "roll": 0}'::json);
 
 -- drone_media #2
 INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, tiny_fingerprint, meta, camera_location, camera_angles) VALUES (2, 1, 1, 1, 2, 'example_fingerprint', 'example_tiny_fingerprint', '{"ext":{"drone_model_key":"0-77-1","file_group_id":"","is_original":true,"line_name":"","payload_model_key":"1-67-0","shoot_position":0,"sn":"1581F5FJC246300E82TU","task_name":"","tinny_fingerprint":"6e7156ee371bfea974d78fcc551cb4d2_2025_4_8_23_19_16"},"metadata":{"absolute_altitude":1799.357,"created_time":"2025-04-08T23:19:17+08:00","gimbal_yaw_degree":136.6,"photoed_position":{"lat":0,"lng":0},"relative_altitude":0,"shoot_position":{"lat":47.53088863888889 ,"lng":10.18527063888889}}}'::json, '{"position":{"longitude": 10.18527063888889, "latitude": 47.53088863888889}, "height": 1799}'::json, '{"heading": 136.6, "pitch": -15.8, "roll": 0}'::json);
-
 
 -- units
 
@@ -141,6 +149,20 @@ INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES 
 -- geo_objects #8
 INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (8, 1, 'Traffic 1', 1, 0, '{"longitude": 10.22, "latitude": 47.54, "height": 1001, "heading": 160, "speed": 135}'::json);
 
+-- markings
+
+-- geo_objects #9
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (9, 1, 'Marking Point', 0, 0, '{"color":"#B620E0","point":[10.240340541717766,47.55910974300143,776.9844360351562]}'::json);
+
+-- geo_objects #10
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (10, 1, 'Marking Line', 0, 1, '{"color":"#ff0000","line":[[10.24,47.56, 1000],[10.23,47.5, 1500]]}'::json);
+
+-- geo_objects #11
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (11, 1, 'Marking Polygon', 0, 2, '{"color":"#00ffff","polygon":[[10.239104579702712,47.55901996532299, 0],[10.23927194960865,47.55947464433558, 0],[10.238535951472102,47.55912132724589, 0]]}'::json);
+
+-- geo_objects #12
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (12, 1, 'Marking Circle', 0, 3, '{"color":"#ffff00","center":[10.239104579702712,47.55901996532299, 900], "radius": 300}'::json);
+
 -- FIX all id sequences
 SELECT setval('users_id_seq', 5, true);
 SELECT setval('workspaces_id_seq', 2, true);
@@ -150,8 +172,10 @@ SELECT setval('flights_id_seq', 2, true);
 SELECT setval('connections_id_seq', 2, true);
 SELECT setval('remote_controller_data_id_seq', 2, true);
 SELECT setval('drone_data_id_seq', 2, true);
-SELECT setval('files_id_seq', 2, true);
+SELECT setval('files_id_seq', 3, true);
 SELECT setval('drone_media_id_seq', 2, true);
-SELECT setval('geo_objects_id_seq', 8, true);
+SELECT setval('geo_objects_id_seq', 12, true);
+SELECT setval('teams_id_seq', 5, true);
+SELECT setval('organisations_id_seq', 1, true);
 
 

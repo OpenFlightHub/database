@@ -11,16 +11,27 @@ CREATE TABLE "users" (
   "reset_code" text,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "state" integer NOT NULL DEFAULT 0,
-  "locale" text NOT NULL DEFAULT 'en-US'
+  "locale" text NOT NULL DEFAULT 'en-US',
+  "created_by_user_id" integer NOT NULL
 );
 
 CREATE TABLE "teams" (
   "id" serial PRIMARY KEY NOT NULL,
   "name" text NOT NULL,
   "owner_user_id" integer NOT NULL,
+  "organisation_id" integer,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "state" integer NOT NULL DEFAULT 0,
-  "locale" text NOT NULL DEFAULT 'en-US'
+  "logo_file_id" integer
+);
+
+CREATE TABLE "organisations" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "name" text NOT NULL,
+  "owner_user_id" integer NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "state" integer NOT NULL DEFAULT 0,
+  "logo_file_id" integer
 );
 
 CREATE TABLE "files" (
@@ -30,7 +41,7 @@ CREATE TABLE "files" (
   "name" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "created_by" integer NOT NULL,
-  "has_thumbnail" boolean NOT NULL DEFAULT false,
+  "thumbnail_format" text,
   "thumbnail_generation_has_failed" boolean NOT NULL DEFAULT false,
   "exif_data" text,
   "exif_data_generation_has_failed" boolean NOT NULL DEFAULT false
@@ -145,6 +156,8 @@ COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = del
 
 COMMENT ON COLUMN "teams"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
+COMMENT ON COLUMN "organisations"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
+
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller';
 
 COMMENT ON COLUMN "drones"."type" IS '0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3';
@@ -230,7 +243,17 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
 
 ALTER TABLE "users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
+ALTER TABLE "users" ADD FOREIGN KEY ("created_by_user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 ALTER TABLE "teams" ADD FOREIGN KEY ("owner_user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "teams" ADD FOREIGN KEY ("organisation_id") REFERENCES "organisations" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "teams" ADD FOREIGN KEY ("logo_file_id") REFERENCES "files" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "organisations" ADD FOREIGN KEY ("owner_user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "organisations" ADD FOREIGN KEY ("logo_file_id") REFERENCES "files" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 

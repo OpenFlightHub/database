@@ -15,18 +15,34 @@ Table users {
   created_at timestamptz [not null, default: `now()`]
   state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
   locale text [not null, default: 'en-US']
+  created_by_user_id integer [not null]
 }
 Ref: users.team_id > teams.id
+Ref: users.created_by_user_id > users.id
 
 Table teams {
   id serial [primary key, not null]
   name text [not null]
   owner_user_id integer [not null]
+  organisation_id integer
   created_at timestamptz [not null, default: `now()`]
   state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
-  locale text [not null, default: 'en-US']
+  logo_file_id integer
 }
 Ref: teams.owner_user_id > users.id
+Ref: teams.organisation_id > organisations.id
+Ref: teams.logo_file_id > files.id
+
+Table organisations {
+  id serial [primary key, not null]
+  name text [not null]
+  owner_user_id integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  state integer [not null, default: 0, note: "0 = invited, 1 = live, 2 = locked, 3 = deleted"]
+  logo_file_id integer
+}
+Ref: organisations.owner_user_id > users.id
+Ref: organisations.logo_file_id > files.id
 
 Table files {
   id serial [primary key, not null]
@@ -35,7 +51,7 @@ Table files {
   name text [not null] // full original name including extension
   created_at timestamptz [not null, default: `now()`]
   created_by integer [not null]
-  has_thumbnail boolean [not null, default: false]
+  thumbnail_format text // if not null, thumbnail exists
   thumbnail_generation_has_failed boolean [not null, default: false]
   exif_data text//json encoded exif data
   exif_data_generation_has_failed boolean [not null, default: false]
