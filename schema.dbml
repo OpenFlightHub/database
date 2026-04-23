@@ -255,3 +255,20 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
   '''
 }
 Ref: geo_objects.workspace_id > workspaces.id
+
+
+// meta
+
+Table api_endpoint_performances {
+  id serial [primary key, not null]
+  url_with_id_params text [not null]
+  endpoint text [not null]
+  http_method text [not null]
+  query text
+  run_time numeric [not null]//ms
+  work_time numeric [not null]//ms
+  started_at timestamptz [not null]
+  logged_at timestamptz [not null, default: `now()`]
+  status_code integer [not null]
+  content_length integer [not null]
+}

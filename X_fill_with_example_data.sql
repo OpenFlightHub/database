@@ -26,7 +26,7 @@ INSERT INTO workspaces (id, name, longitude, latitude) VALUES (1, 'Test Usage Ex
 -- files #1
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20230608135046_0004_T.JPG', 'JPG', 1);
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
-INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (3, 1, 'logo_small.png', 'png', 0);
+INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (3, 0, 'logo_small.png', 'png', 0);
 
 -- organisations #0
 INSERT INTO organisations (id, name, owner_user_id, logo_file_id) VALUES (0, 'system', 0, 3);

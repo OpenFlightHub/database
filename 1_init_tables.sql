@@ -152,6 +152,20 @@ CREATE TABLE "geo_objects" (
   "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "api_endpoint_performances" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "url_with_id_params" text NOT NULL,
+  "endpoint" text NOT NULL,
+  "http_method" text NOT NULL,
+  "query" text,
+  "run_time" numeric NOT NULL,
+  "work_time" numeric NOT NULL,
+  "started_at" timestamptz NOT NULL,
+  "logged_at" timestamptz NOT NULL DEFAULT (now()),
+  "status_code" integer NOT NULL,
+  "content_length" integer NOT NULL
+);
+
 COMMENT ON COLUMN "users"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
 COMMENT ON COLUMN "teams"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
