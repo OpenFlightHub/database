@@ -36,7 +36,7 @@ CREATE TABLE "organisations" (
 
 CREATE TABLE "files" (
   "id" serial PRIMARY KEY NOT NULL,
-  "workspace_id" integer NOT NULL,
+  "workspace_id" integer,
   "ext" text NOT NULL,
   "name" text NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
@@ -51,7 +51,10 @@ CREATE TABLE "workspaces" (
   "id" serial PRIMARY KEY NOT NULL,
   "name" text NOT NULL,
   "longitude" float8 NOT NULL,
-  "latitude" float8 NOT NULL
+  "latitude" float8 NOT NULL,
+  "owner_team_id" integer,
+  "owner_organisation_id" integer,
+  "created_by" integer NOT NULL
 );
 
 CREATE TABLE "workspace_permissions" (
@@ -94,7 +97,18 @@ CREATE TABLE "flights" (
   "workspace_id" integer NOT NULL,
   "started_at" timestamptz NOT NULL DEFAULT (now()),
   "landed_at" timestamptz,
-  "ended_at" timestamptz
+  "ended_at" timestamptz,
+  "is_created_manually" boolean NOT NULL DEFAULT false,
+  "is_changed_manually" boolean NOT NULL DEFAULT false,
+  "updated_by" integer
+);
+
+CREATE TABLE "flight_users" (
+  "flight_id" integer NOT NULL,
+  "user_id" integer NOT NULL,
+  "type" integer NOT NULL,
+  "created_by" integer NOT NULL,
+  PRIMARY KEY ("flight_id", "user_id")
 );
 
 CREATE TABLE "flight_data" (
@@ -152,6 +166,37 @@ CREATE TABLE "geo_objects" (
   "updated_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "missions" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "workspace_id" integer NOT NULL,
+  "name" text NOT NULL,
+  "description" text,
+  "created_by" integer NOT NULL,
+  "updated_by" integer NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now()),
+  "assigned_to_team_id" integer,
+  "state" integer NOT NULL DEFAULT 0
+);
+
+CREATE TABLE "tasks" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "mission_id" integer NOT NULL,
+  "name" text NOT NULL,
+  "description" text,
+  "created_by" integer NOT NULL,
+  "updated_by" integer NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now()),
+  "state" integer NOT NULL DEFAULT 0
+);
+
+CREATE TABLE "task_geo_objects" (
+  "geo_object_id" integer NOT NULL,
+  "task_id" integer NOT NULL,
+  PRIMARY KEY ("geo_object_id", "task_id")
+);
+
 CREATE TABLE "api_endpoint_performances" (
   "id" serial PRIMARY KEY NOT NULL,
   "url_with_id_params" text NOT NULL,
@@ -172,9 +217,34 @@ COMMENT ON COLUMN "teams"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = del
 
 COMMENT ON COLUMN "organisations"."state" IS '0 = invited, 1 = live, 2 = locked, 3 = deleted';
 
+COMMENT ON TABLE "workspaces" IS '[TypescriptType]=
+
+export type DBType_Workspace = DBType_Workspace_ForOrganisation | DBType_Workspace_ForTeam
+
+export type DBType_Workspace_ForOrganisation = {
+    id: number;
+    name: string;
+    longitude: number;
+    latitude: number;
+    owner_organisation_id: number;
+    created_by: number;
+}
+
+export type DBType_Workspace_ForTeam = {
+    id: number;
+    name: string;
+    longitude: number;
+    latitude: number;
+    owner_team_id: number;
+    created_by: number;
+}
+';
+
 COMMENT ON COLUMN "remote_controllers"."type" IS '0 = unknown, 1 = dji rc plus, 2 = dji rc pro enterprise, 3 = dji rc plus 2, 4 = dji smart controller';
 
 COMMENT ON COLUMN "drones"."type" IS '0 = unknown, 1 = dji matrice 300, 2 = dji matrice 30, 3 = dji matrice 350, 4 = dji mavic 3';
+
+COMMENT ON COLUMN "flight_users"."type" IS '0 = pilot, 1 = sensor operator, 2 = leader, 3 = air space monitoring';
 
 COMMENT ON COLUMN "flight_data"."type" IS '0 = position';
 
@@ -255,6 +325,10 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
 
   ';
 
+COMMENT ON COLUMN "missions"."state" IS '0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed';
+
+COMMENT ON COLUMN "tasks"."state" IS '0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed';
+
 ALTER TABLE "users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "users" ADD FOREIGN KEY ("created_by_user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
@@ -272,6 +346,12 @@ ALTER TABLE "organisations" ADD FOREIGN KEY ("logo_file_id") REFERENCES "files" 
 ALTER TABLE "files" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "files" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "workspaces" ADD FOREIGN KEY ("owner_organisation_id") REFERENCES "organisations" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "workspaces" ADD FOREIGN KEY ("owner_team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "workspaces" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "workspace_permissions" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
@@ -291,6 +371,14 @@ ALTER TABLE "flights" ADD FOREIGN KEY ("drone_id") REFERENCES "drones" ("id") DE
 
 ALTER TABLE "flights" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
+ALTER TABLE "flights" ADD FOREIGN KEY ("updated_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "flight_users" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "flight_users" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "flight_users" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 ALTER TABLE "flight_data" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "remote_controller_data" ADD FOREIGN KEY ("remote_controller_id") REFERENCES "remote_controllers" ("id") DEFERRABLE INITIALLY IMMEDIATE;
@@ -306,3 +394,21 @@ ALTER TABLE "drone_media" ADD FOREIGN KEY ("file_id") REFERENCES "files" ("id") 
 ALTER TABLE "drone_media" ADD FOREIGN KEY ("flight_id") REFERENCES "flights" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "geo_objects" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "missions" ADD FOREIGN KEY ("workspace_id") REFERENCES "workspaces" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "missions" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "missions" ADD FOREIGN KEY ("assigned_to_team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "missions" ADD FOREIGN KEY ("updated_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "tasks" ADD FOREIGN KEY ("mission_id") REFERENCES "missions" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "tasks" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "tasks" ADD FOREIGN KEY ("updated_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "task_geo_objects" ADD FOREIGN KEY ("geo_object_id") REFERENCES "geo_objects" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "task_geo_objects" ADD FOREIGN KEY ("task_id") REFERENCES "tasks" ("id") DEFERRABLE INITIALLY IMMEDIATE;

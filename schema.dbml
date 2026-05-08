@@ -46,7 +46,7 @@ Ref: organisations.logo_file_id > files.id
 
 Table files {
   id serial [primary key, not null]
-  workspace_id integer [not null]
+  workspace_id integer
   ext text [not null]
   name text [not null] // full original name including extension
   created_at timestamptz [not null, default: `now()`]
@@ -68,6 +68,29 @@ Table workspaces {
   owner_team_id integer //either owner_team_id or owner_organisation_id must be set!
   owner_organisation_id integer //either owner_team_id or owner_organisation_id must be set!
   created_by integer [not null]
+
+  note: '''[TypescriptType]=
+
+export type DBType_Workspace = DBType_Workspace_ForOrganisation | DBType_Workspace_ForTeam
+
+export type DBType_Workspace_ForOrganisation = {
+    id: number;
+    name: string;
+    longitude: number;
+    latitude: number;
+    owner_organisation_id: number;
+    created_by: number;
+}
+
+export type DBType_Workspace_ForTeam = {
+    id: number;
+    name: string;
+    longitude: number;
+    latitude: number;
+    owner_team_id: number;
+    created_by: number;
+}
+'''
 }
 Ref: workspaces.owner_organisation_id > organisations.id
 Ref: workspaces.owner_team_id > teams.id
@@ -124,9 +147,11 @@ Table flights {
   ended_at timestamptz
   is_created_manually boolean [not null, default: false]// false = is created by telemetry input
   is_changed_manually boolean [not null, default: false]// true if any data has been changed by a user (always true if is_created_manually = true)
+  updated_by integer
 }
 Ref: flights.drone_id > drones.id
 Ref: flights.workspace_id > workspaces.id
+Ref: flights.updated_by > users.id
 
 Table flight_users {
   flight_id integer [primary key, not null]

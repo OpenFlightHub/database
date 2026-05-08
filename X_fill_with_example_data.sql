@@ -18,22 +18,24 @@ INSERT INTO users (id, created_by_user_id, name, email, email_hash, password) VA
 INSERT INTO users (id, created_by_user_id, name, email, email_hash, password) VALUES (5, 0, 'edp', 'edp@openflighthub.org', '', '64$65536$8$1$Gd6jprqm68qOQeRotxmLCZYGLZRMjdbZNluI4CsqEA4=$0auLNnLn1/q/fSdI96LuhyP4shW77BrWRoA1h0JS+hpP1YTCEJ0uQa71vikAn8a2ozN25qpuKtpzZ5FHsj60+A==');
 
 
+-- organisations #0
+INSERT INTO organisations (id, name, owner_user_id) VALUES (0, 'system', 0);
+
+-- organisations #1
+INSERT INTO organisations (id, name, owner_user_id) VALUES (1, 'edp', 5);
+
+
 -- workspaces #0 system (backup workspace in case drone connection has no current connection (should never happen))
-INSERT INTO workspaces (id, name, longitude, latitude) VALUES (0, 'System', 10, 47);
+INSERT INTO workspaces (id, name, longitude, latitude, created_by, owner_organisation_id) VALUES (0, 'System', 10, 47, 0, 0);
 -- workspaces #1
-INSERT INTO workspaces (id, name, longitude, latitude) VALUES (1, 'Test Usage Example', 10.270800, 47.563710);
+INSERT INTO workspaces (id, name, longitude, latitude, created_by, owner_organisation_id) VALUES (1, 'Test Usage Example', 10.270800, 47.563710, 0, 0);
 
 -- files #1
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (1, 1, 'DJI_20230608135046_0004_T.JPG', 'JPG', 1);
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (2, 1, 'DJI_20230608135032_0003_W.JPG', 'JPG', 1);
 INSERT INTO files (id, workspace_id, name, ext, created_by) VALUES (3, 0, 'logo_small.png', 'png', 0);
 
--- organisations #0
-INSERT INTO organisations (id, name, owner_user_id, logo_file_id) VALUES (0, 'system', 0, 3);
-
--- organisations #1
-INSERT INTO organisations (id, name, owner_user_id) VALUES (1, 'edp', 5);
-
+UPDATE organisations SET logo_file_id = 3 WHERE id = 0;
 
 -- teams #0
 INSERT INTO teams (id, name, owner_user_id, organisation_id) VALUES (0, 'system', 0, 0);
@@ -91,7 +93,7 @@ INSERT INTO remote_controller_data (id, remote_controller_id, type, data) VALUES
 
 
 -- workspaces #2
-INSERT INTO workspaces (id, name, longitude, latitude) VALUES (2, 'Some Workspace', 10.294488, 47.629693);
+INSERT INTO workspaces (id, name, longitude, latitude, created_by, owner_organisation_id) VALUES (2, 'Some Workspace', 10.294488, 47.629693, 0, 0);
 -- grant permissions for team 4
 INSERT INTO workspace_permissions (workspace_id, team_id) VALUES (2, 4);
 
