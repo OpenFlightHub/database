@@ -280,9 +280,11 @@ Table missions {
   name text [not null]
   description text
   created_by integer [not null]
+  updated_by integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
   assigned_to_team_id integer
   state integer [not null, default: 0, note: "0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed"]
-  updated_by integer [not null]
 }
 Ref: missions.workspace_id > workspaces.id
 Ref: missions.created_by > users.id
@@ -295,8 +297,10 @@ Table tasks {
   name text [not null]
   description text
   created_by integer [not null]
-  state integer [not null, default: 0, note: "0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed"]
   updated_by integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  state integer [not null, default: 0, note: "0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed"]
 }
 Ref: tasks.mission_id > missions.id
 Ref: tasks.created_by > users.id
