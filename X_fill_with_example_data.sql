@@ -165,6 +165,26 @@ INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES 
 -- geo_objects #12
 INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (12, 1, 'Marking Circle', 0, 3, '{"color":"#ffff00","center":[10.239104579702712,47.55901996532299, 900], "radius": 300}'::json);
 
+-- missions
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name, description) VALUES (1, 0, 0, 0, 'Mission Planned', 'This is the first mission');
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name, assigned_to_team_id) VALUES (1, 0, 0, 1, 'Mission Accepted', 1);
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name, assigned_to_team_id) VALUES (1, 0, 0, 2, 'Mission In Progress', 1);
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name, assigned_to_team_id) VALUES (1, 0, 0, 3, 'Mission Done', 1);
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 4, 'Mission Rejected');
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 5, 'Mission Failed');
+INSERT INTO missions (workspace_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 6, 'Mission Canceled');
+
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name, description) VALUES (1, 0, 0, 0, 'Task Planned', 'This is the first task');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 1, 'Task Accepted');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 2, 'Task In Progress');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 3, 'Task Done');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 4, 'Task Rejected');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 5, 'Task Failed');
+INSERT INTO tasks (mission_id, created_by, updated_by, state, name) VALUES (1, 0, 0, 6, 'Task Canceled');
+
+INSERT INTO task_geo_objects (task_id, geo_object_id) VALUES (1, 9);
+INSERT INTO task_geo_objects (task_id, geo_object_id) VALUES (1, 10);
+
 -- FIX all id sequences
 SELECT setval('users_id_seq', 5, true);
 SELECT setval('workspaces_id_seq', 2, true);

@@ -325,9 +325,9 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
 
   ';
 
-COMMENT ON COLUMN "missions"."state" IS '0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed';
+COMMENT ON COLUMN "missions"."state" IS '0 = planned, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed, 6 = canceled';
 
-COMMENT ON COLUMN "tasks"."state" IS '0 = pending, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed';
+COMMENT ON COLUMN "tasks"."state" IS '0 = planned, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed, 6 = canceled';
 
 ALTER TABLE "users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 

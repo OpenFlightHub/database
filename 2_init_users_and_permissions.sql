@@ -67,3 +67,5 @@ GRANT USAGE ON SEQUENCE public.missions_id_seq TO api;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.tasks TO api;
 GRANT USAGE ON SEQUENCE public.tasks_id_seq TO api;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.task_geo_objects TO api;
