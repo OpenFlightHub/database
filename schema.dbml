@@ -218,7 +218,7 @@ Ref: drone_media.flight_id > flights.id
 Table geo_objects {
   id serial [primary key, not null]
   uuid text [not null, unique, default: `uuid_generate_v4()`]
-  workspace_id integer [not null]
+  workspace_id integer // if null it is a global geoobject (currently only used for traffic)
   name text [not null]
   type integer [not null]
   sub_type integer [not null]
@@ -235,7 +235,7 @@ DBType_Geo_Object_Base<2, 0> | DBType_Geo_Object_Base<2, 1> | DBType_Geo_Object_
 export type DBType_Geo_Object_Base<type extends DBType_Geo_Object_TypeType, sub_type extends DBType_Geo_Object_SubTypeType<type>> = {
     id: number;
     uuid: string;
-    workspace_id: number;
+    workspace_id?: number;
     name: string;
     type: type;
     sub_type: sub_type;
