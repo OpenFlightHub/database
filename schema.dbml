@@ -226,6 +226,8 @@ Table geo_objects {
   created_at timestamptz [not null, default: `now()`]
   updated_at timestamptz [not null, default: `now()`]
 
+  is_synced_with_dji boolean [not null, default: false]// set to true when any connections websocket has been used to create the object
+
   note: '''[TypescriptType]=
 
 export type DBType_Geo_Object = DBType_Geo_Object_Base<0, 0> | DBType_Geo_Object_Base<0, 1> | DBType_Geo_Object_Base<0, 2> | DBType_Geo_Object_Base<0, 3> |
@@ -242,6 +244,7 @@ export type DBType_Geo_Object_Base<type extends DBType_Geo_Object_TypeType, sub_
     config: DBType_Geo_Object_ConfigType<type, sub_type>;
     created_at: string;
     updated_at: string;
+    is_synced_with_dji: boolean
 }
 
 

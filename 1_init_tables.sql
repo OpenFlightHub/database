@@ -163,7 +163,8 @@ CREATE TABLE "geo_objects" (
   "sub_type" integer NOT NULL,
   "config" json NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "updated_at" timestamptz NOT NULL DEFAULT (now())
+  "updated_at" timestamptz NOT NULL DEFAULT (now()),
+  "is_synced_with_dji" boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE "missions" (
