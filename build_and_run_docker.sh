@@ -6,7 +6,7 @@ docker rm ofh-database || true
 
 docker volume rm ofh-pg-data
 
-docker run -itd --restart unless-stopped -e POSTGRES_USER=ofh -e POSTGRES_PASSWORD=ofh -p 5000:5432 -v ofh-pg-data:/var/lib/postgresql/data  --name ofh-database postgres:15.2
+docker run -itd --restart unless-stopped -e POSTGRES_USER=ofh -e POSTGRES_PASSWORD=ofh -p 5000:5432 -v ofh-pg-data:/var/lib/postgresql  --name ofh-database postgis/postgis:18-3.6
 
 cat wait-for.sh | sh -s -- localhost:5000 -- echo "Database is up"
 sleep 10

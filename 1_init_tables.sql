@@ -164,6 +164,7 @@ CREATE TABLE "geo_objects" (
   "config" json NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "updated_at" timestamptz NOT NULL DEFAULT (now()),
+  "geom" geometry,
   "is_synced_with_dji" boolean NOT NULL DEFAULT false
 );
 
@@ -196,6 +197,19 @@ CREATE TABLE "task_geo_objects" (
   "geo_object_id" integer NOT NULL,
   "task_id" integer NOT NULL,
   PRIMARY KEY ("geo_object_id", "task_id")
+);
+
+CREATE TABLE "collision_object_coverage_areas" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "geom" geometry NOT NULL,
+  "radius" float8 NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "updated_at" timestamptz NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "collision_object_geo_objects" (
+  "geo_object_id" integer NOT NULL,
+  "coverage_area_id" integer NOT NULL
 );
 
 CREATE TABLE "api_endpoint_performances" (
@@ -259,7 +273,8 @@ COMMENT ON TABLE "geo_objects" IS '[TypescriptType]=
 
 export type DBType_Geo_Object = DBType_Geo_Object_Base<0, 0> | DBType_Geo_Object_Base<0, 1> | DBType_Geo_Object_Base<0, 2> | DBType_Geo_Object_Base<0, 3> |
 DBType_Geo_Object_Base<1, 0> | DBType_Geo_Object_Base<1, 1> | DBType_Geo_Object_Base<1, 2> | DBType_Geo_Object_Base<1, 3> | DBType_Geo_Object_Base<1, 4> |
-DBType_Geo_Object_Base<2, 0> | DBType_Geo_Object_Base<2, 1> | DBType_Geo_Object_Base<2, 2> | DBType_Geo_Object_Base<2, 3> | DBType_Geo_Object_Base<2, 4> | DBType_Geo_Object_Base<2, 5> | DBType_Geo_Object_Base<2, 6>
+DBType_Geo_Object_Base<2, 0> | DBType_Geo_Object_Base<2, 1> | DBType_Geo_Object_Base<2, 2> | DBType_Geo_Object_Base<2, 3> | DBType_Geo_Object_Base<2, 4> | DBType_Geo_Object_Base<2, 5> | DBType_Geo_Object_Base<2, 6> |
+DBType_Geo_Object_Base<3, 0> | DBType_Geo_Object_Base<3, 1> | DBType_Geo_Object_Base<3, 2> | DBType_Geo_Object_Base<3, 3> | DBType_Geo_Object_Base<3, 4> | DBType_Geo_Object_Base<3, 5> | DBType_Geo_Object_Base<3, 6>
 
 export type DBType_Geo_Object_Base<type extends DBType_Geo_Object_TypeType, sub_type extends DBType_Geo_Object_SubTypeType<type>> = {
     id: number;
@@ -272,21 +287,24 @@ export type DBType_Geo_Object_Base<type extends DBType_Geo_Object_TypeType, sub_
     created_at: string;
     updated_at: string;
     is_synced_with_dji: boolean;
+    geom: ST_Geometry
 }
 
 
-export type DBType_Geo_Object_TypeType = 0|1|2
+export type DBType_Geo_Object_TypeType = 0|1|2|3
 
 export const DBType_Geo_Object_Type_TYPES = {
   marking: 0,
   traffic: 1,
-  unit: 2
+  unit: 2,
+  collision: 3
 } as const
 
 export type DBType_Geo_Object_SubTypeType<type extends DBType_Geo_Object_TypeType> =
     type extends 0 ? (0|1|2|3) :
     type extends 1 ? (0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15) :
-    type extends 2 ? (0|1|2|3|4|5|6) : unknown
+    type extends 2 ? (0|1|2|3|4|5|6) :
+    type extends 3 ? (0|1|2|3|4|5|6) : unknown
 
 
 export const DBType_Geo_Object_SubType_TYPES = {
@@ -322,6 +340,15 @@ export const DBType_Geo_Object_SubType_TYPES = {
     ground_vehicle: 4,
     ground_staff: 5,
     other: 6
+  },
+  collision: {
+    power_tower: 0,
+    power_pole: 1,
+    power_line_large: 2,
+    power_line_small_or_catenary: 3,
+    aerialway_pylon: 4,
+    aerialway: 5,
+    building: 6
   }
 } as const
 
@@ -334,6 +361,14 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
     {longitude: number, latitude: number, height: number, heading?: number, speed?: number}
 ) : type extends 2 ? (
     {longitude: number, latitude: number, symbol: string, height?: number, heading?: number, speed?: number}
+) : type extends 3 ? (
+    sub_type extends 0 ? {id: number, point: [number, number, number]} :
+    sub_type extends 1 ? {id: number, point: [number, number, number]} :
+    sub_type extends 2 ? {id: number, line: [number, number, number][]} :
+    sub_type extends 3 ? {id: number, line: [number, number, number][]} :
+    sub_type extends 4 ? {id: number, point: [number, number, number]} :
+    sub_type extends 5 ? {id: number, line: [number, number, number][]} :
+    sub_type extends 6 ? {id: number, polygon: [number, number, number][]} : unknown
 ) : unknown
 
   ';
@@ -341,6 +376,17 @@ export type DBType_Geo_Object_ConfigType<type extends DBType_Geo_Object_TypeType
 COMMENT ON COLUMN "missions"."state" IS '0 = planned, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed, 6 = canceled';
 
 COMMENT ON COLUMN "tasks"."state" IS '0 = planned, 1 = accepted, 2 = in progress, 3 = done, 4 = rejected, 5 = failed, 6 = canceled';
+
+COMMENT ON TABLE "collision_object_coverage_areas" IS '[TypescriptType]=
+
+export type DBType_Collision_Object_Coverage_Area = {
+    id: number;
+    geom: ST_Point;
+    radius: number;
+    created_at: string;
+    updated_at: string;
+}
+';
 
 ALTER TABLE "users" ADD FOREIGN KEY ("team_id") REFERENCES "teams" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
@@ -425,3 +471,7 @@ ALTER TABLE "tasks" ADD FOREIGN KEY ("updated_by") REFERENCES "users" ("id") DEF
 ALTER TABLE "task_geo_objects" ADD FOREIGN KEY ("geo_object_id") REFERENCES "geo_objects" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "task_geo_objects" ADD FOREIGN KEY ("task_id") REFERENCES "tasks" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "collision_object_geo_objects" ADD FOREIGN KEY ("geo_object_id") REFERENCES "geo_objects" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "collision_object_geo_objects" ADD FOREIGN KEY ("coverage_area_id") REFERENCES "collision_object_coverage_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
