@@ -132,38 +132,38 @@ INSERT INTO drone_media (id, drone_id, flight_id, type, file_id, fingerprint, ti
 -- units
 
 -- geo_objects #1
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (1, 1, 'Unit 1', 2, 0, '{"longitude": 10.22, "latitude": 47.56, "symbol": "/images/geo_objects/units/0.png", "height": 890, "heading": 45, "speed": 35}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (1, 1, 'Unit 1', 2, 0, '{"longitude": 10.22, "latitude": 47.56, "symbol": "/images/geo_objects/units/0.png", "height": 890, "heading": 45, "speed": 35}'::json, 'SRID=4979;POINT(10.22 47.56 0)'::geometry);
 -- geo_objects #2
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (2, 1, 'Unit 2', 2, 1, '{"longitude": 10.23, "latitude": 47.56, "symbol": "/images/geo_objects/units/1.png", "height": 820, "heading": 78, "speed": 15}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (2, 1, 'Unit 2', 2, 1, '{"longitude": 10.23, "latitude": 47.56, "symbol": "/images/geo_objects/units/1.png", "height": 820, "heading": 78, "speed": 15}'::json, 'SRID=4979;POINT(10.23 47.56 0)'::geometry);
 -- geo_objects #3
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (3, 1, 'Unit 3', 2, 2, '{"longitude": 10.24, "latitude": 47.56, "symbol": "/images/geo_objects/units/2.png", "height": 780, "heading": 95, "speed": 5}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (3, 1, 'Unit 3', 2, 2, '{"longitude": 10.24, "latitude": 47.56, "symbol": "/images/geo_objects/units/2.png", "height": 780, "heading": 95, "speed": 5}'::json, 'SRID=4979;POINT(10.24 47.56 0)'::geometry);
 -- geo_objects #4
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (4, 1, 'Unit 4', 2, 3, '{"longitude": 10.25, "latitude": 47.56, "symbol": "/images/geo_objects/units/3.png", "height": 760, "heading": 10, "speed": 0}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (4, 1, 'Unit 4', 2, 3, '{"longitude": 10.25, "latitude": 47.56, "symbol": "/images/geo_objects/units/3.png", "height": 760, "heading": 10, "speed": 0}'::json, 'SRID=4979;POINT(10.25 47.56 0)'::geometry);
 -- geo_objects #5
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (5, 1, 'Unit 5', 2, 4, '{"longitude": 10.26, "latitude": 47.56, "symbol": "/images/geo_objects/units/4.png", "height": 0, "heading": 270, "speed": 50}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (5, 1, 'Unit 5', 2, 4, '{"longitude": 10.26, "latitude": 47.56, "symbol": "/images/geo_objects/units/4.png", "height": 0, "heading": 270, "speed": 50}'::json, 'SRID=4979;POINT(10.26 47.56 0)'::geometry);
 -- geo_objects #6
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (6, 1, 'Unit 6', 2, 5, '{"longitude": 10.27, "latitude": 47.56, "symbol": "/images/geo_objects/units/5.png", "height": 0, "heading": 170, "speed": 50}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (6, 1, 'Unit 6', 2, 5, '{"longitude": 10.27, "latitude": 47.56, "symbol": "/images/geo_objects/units/5.png", "height": 0, "heading": 170, "speed": 50}'::json, 'SRID=4979;POINT(10.27 47.56 0)'::geometry);
 -- geo_objects #7
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (7, 1, 'Unit 7', 2, 6, '{"longitude": 10.28, "latitude": 47.56, "symbol": "/images/geo_objects/units/6.png", "height": 0, "heading": 290, "speed": 0}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (7, 1, 'Unit 7', 2, 6, '{"longitude": 10.28, "latitude": 47.56, "symbol": "/images/geo_objects/units/6.png", "height": 0, "heading": 290, "speed": 0}'::json, 'SRID=4979;POINT(10.28 47.56 0)'::geometry);
 
 -- traffic
 
 -- geo_objects #8
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (8, 1, 'Traffic 1', 1, 0, '{"longitude": 10.22, "latitude": 47.54, "height": 1001, "heading": 160, "speed": 135}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (8, 1, 'Traffic 1', 1, 0, '{"longitude": 10.22, "latitude": 47.54, "height": 1001, "heading": 160, "speed": 135}'::json, 'SRID=4979;POINT(10.22 47.54 0)'::geometry);
 
 -- markings
 
 -- geo_objects #9
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (9, 1, 'Marking Point', 0, 0, '{"color":"#B620E0","point":[10.240340541717766,47.55910974300143,776.9844360351562]}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (9, 1, 'Marking Point', 0, 0, '{"color":"#B620E0","point":[10.240340541717766,47.55910974300143,776.9844360351562]}'::json, 'SRID=4979;POINT(10.240340541717766 47.55910974300143 776.9844360351562)'::geometry);
 
 -- geo_objects #10
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (10, 1, 'Marking Line', 0, 1, '{"color":"#ff0000","line":[[10.24,47.56, 1000],[10.23,47.5, 1500]]}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (10, 1, 'Marking Line', 0, 1, '{"color":"#ff0000","line":[[10.24,47.56, 1000],[10.23,47.5, 1500]]}'::json, 'SRID=4979;LINESTRING(10.24 47.56 1000,10.23 47.5 1500)'::geometry);
 
 -- geo_objects #11
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (11, 1, 'Marking Polygon', 0, 2, '{"color":"#00ffff","polygon":[[10.239104579702712,47.55901996532299, 0],[10.23927194960865,47.55947464433558, 0],[10.238535951472102,47.55912132724589, 0]]}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (11, 1, 'Marking Polygon', 0, 2, '{"color":"#00ffff","polygon":[[10.239104579702712,47.55901996532299, 0],[10.23927194960865,47.55947464433558, 0],[10.238535951472102,47.55912132724589, 0]]}'::json, 'SRID=4979;LINESTRING(10.239104579702712 47.55901996532299 0,10.23927194960865 47.55947464433558 0,10.238535951472102 47.55912132724589 0,10.239104579702712 47.55901996532299 0)'::geometry);
 
 -- geo_objects #12
-INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config) VALUES (12, 1, 'Marking Circle', 0, 3, '{"color":"#ffff00","center":[10.239104579702712,47.55901996532299, 900], "radius": 300}'::json);
+INSERT INTO geo_objects (id, workspace_id, name, type, sub_type, config, geom) VALUES (12, 1, 'Marking Circle', 0, 3, '{"color":"#ffff00","center":[10.239104579702712,47.55901996532299, 900], "radius": 300}'::json, 'SRID=4979;POINT(10.239104579702712 47.55901996532299 900)'::geometry);
 
 -- missions
 INSERT INTO missions (workspace_id, created_by, updated_by, state, name, description) VALUES (1, 0, 0, 0, 'Mission Planned', 'This is the first mission');
