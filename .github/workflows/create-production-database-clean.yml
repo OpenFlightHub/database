@@ -37,8 +37,9 @@ jobs:
       - name: Wait until database is online
         run: |
           cd repo
-          cat wait-for.sh | sh -s -- localhost:5000 -- echo "Database is up"
           sleep 15
+          cat wait-for.sh | sh -s -- localhost:5000 -- echo "Database is up"
+          sleep 30
 
       - name: Initialize database
         run: |
