@@ -32,7 +32,7 @@ jobs:
 
       - name: Start new docker container
         run: |
-          docker run -itd --restart unless-stopped -e POSTGRES_USER=${{secrets.POSTGRES_USER}} -e POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} --network=ofh -p 127.0.0.1:5000:5432 -v /data:/var/lib/postgresql/data --name ${{ env.PROJECT_NAME }} postgis/postgis:18-3.6
+          docker run -itd --restart unless-stopped -e POSTGRES_USER=${{secrets.POSTGRES_USER}} -e POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}} --network=ofh -p 127.0.0.1:5000:5432 -v /data:/var/lib/postgresql --name ${{ env.PROJECT_NAME }} postgis/postgis:18-3.6
 
       - name: Wait until database is online
         run: |
