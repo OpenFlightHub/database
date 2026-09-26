@@ -401,6 +401,18 @@ Table collision_object_geo_objects {
 Ref: collision_object_geo_objects.geo_object_id > geo_objects.id
 Ref: collision_object_geo_objects.coverage_area_id > collision_object_coverage_areas.id
 
+Table live_share_keys {
+  id serial [primary key, not null]
+  key text [not null]
+  connection_id integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  created_by integer [not null]
+  valid_until timestamptz [not null, default: `now() + interval '1 day'`]
+}
+
+Ref: live_share_keys.connection_id > connections.id
+Ref: live_share_keys.created_by > users.id
+
 // meta
 
 Table api_endpoint_performances {

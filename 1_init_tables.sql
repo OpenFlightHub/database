@@ -214,6 +214,15 @@ CREATE TABLE "collision_object_geo_objects" (
   "coverage_area_id" integer NOT NULL
 );
 
+CREATE TABLE "live_share_keys" (
+  "id" serial PRIMARY KEY NOT NULL,
+  "key" text NOT NULL,
+  "connection_id" integer NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "created_by" integer NOT NULL,
+  "valid_until" timestamptz NOT NULL DEFAULT (now() + interval '1 day')
+);
+
 CREATE TABLE "api_endpoint_performances" (
   "id" serial PRIMARY KEY NOT NULL,
   "url_with_id_params" text NOT NULL,
@@ -477,3 +486,7 @@ ALTER TABLE "task_geo_objects" ADD FOREIGN KEY ("task_id") REFERENCES "tasks" ("
 ALTER TABLE "collision_object_geo_objects" ADD FOREIGN KEY ("geo_object_id") REFERENCES "geo_objects" ("id") DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE "collision_object_geo_objects" ADD FOREIGN KEY ("coverage_area_id") REFERENCES "collision_object_coverage_areas" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "live_share_keys" ADD FOREIGN KEY ("connection_id") REFERENCES "connections" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
+ALTER TABLE "live_share_keys" ADD FOREIGN KEY ("created_by") REFERENCES "users" ("id") DEFERRABLE INITIALLY IMMEDIATE;
