@@ -340,6 +340,7 @@ Table missions {
   workspace_id integer [not null]
   name text [not null]
   description text
+  notes text
   created_by integer [not null]
   updated_by integer [not null]
   created_at timestamptz [not null, default: `now()`]
@@ -357,6 +358,7 @@ Table tasks {
   mission_id integer [not null]
   name text [not null]
   description text
+  notes text
   created_by integer [not null]
   updated_by integer [not null]
   created_at timestamptz [not null, default: `now()`]
