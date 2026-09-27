@@ -74,3 +74,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.collision_object_coverage_a
 GRANT USAGE ON SEQUENCE public.collision_object_coverage_areas_id_seq TO api;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.collision_object_geo_objects TO api;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.live_share_keys TO api;
+GRANT USAGE ON SEQUENCE public.live_share_keys_id_seq TO api;

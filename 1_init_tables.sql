@@ -217,6 +217,7 @@ CREATE TABLE "collision_object_geo_objects" (
 CREATE TABLE "live_share_keys" (
   "id" serial PRIMARY KEY NOT NULL,
   "key" text NOT NULL,
+  "name" text,
   "connection_id" integer NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "created_by" integer NOT NULL,

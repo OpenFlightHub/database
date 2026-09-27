@@ -404,6 +404,7 @@ Ref: collision_object_geo_objects.coverage_area_id > collision_object_coverage_a
 Table live_share_keys {
   id serial [primary key, not null]
   key text [not null]
+  name text
   connection_id integer [not null]
   created_at timestamptz [not null, default: `now()`]
   created_by integer [not null]
